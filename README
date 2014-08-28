@@ -1,0 +1,33 @@
+Venus: synonym for Victron Energy Unix like distro with a linux kernel
+
+The problematic part with this name is that it is from the Roman
+mythology and not as most of our products from the Greek. Phoenix
+is already taken though by a charger...
+
+First of all, in general you don't want to rebuild a complete rootfs,
+it takes time to compile, lots of diskspace and results in an
+image / sdk already provide in binary form.
+
+Anyway, if you insists.. This repo contains some wrapper around
+bitbake to fetch, compile sources. For a complete build you need
+to have access to private repro of Victron Energy, but generic
+images should compile fine without them.
+
+TODO: instructions to do so..
+
+For a complete build:
+
+# install ssh keys for github / gitlab etc
+make fetch-all
+./repos checkout danny_venus
+make ccgx
+
+Note: repos is just like git submodule foreach -q git,
+but shorter, so you can just do:
+./repos push origin danny_venus
+./repos tag xyz
+
+it will push all, tag all etc. Likewise you can revert to a certain
+revision with:
+
+./repos checkout tagname
