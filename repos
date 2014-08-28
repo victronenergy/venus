@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# for the lazy..
+./repos_cmd git $@
