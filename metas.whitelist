@@ -1,0 +1,7 @@
+sources/meta-ccgx
+sources/meta-openembedded/meta-networking
+sources/meta-openembedded/meta-oe
+sources/meta-openembedded/meta-webserver
+sources/meta-victronenergy
+sources/meta-victronenergy-overlay
+sources/openembedded-core/meta
