@@ -17,7 +17,7 @@ clean:
 	@rm -rf build/tmp-eglibc
 	@rm -rf build/sstate-cache
 	@rm -rf deploy
-	@rm build/conf/bblayers.conf
+	@rm -f build/conf/bblayers.conf
 
 ccgx: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build && bitbake bpp3-rootfs
@@ -26,7 +26,7 @@ distclean: clean
 	@rm -rf downloads
 
 fetch-all:
-	@-rm build/conf/bblayers.conf
+	@rm -f build/conf/bblayers.conf
 	@while read p; do ./git-fetch-remote.sh $$p; done <repos.conf
 
 install:
