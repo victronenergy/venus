@@ -31,3 +31,8 @@ it will push all, tag all etc. Likewise you can revert to a certain
 revision with:
 
 ./repos checkout tagname
+
+The repos.conf file contains the repositories which need to be checked
+out. It can be rebuild with make repos.conf. metas.whitelist contains
+the meta directory which will be added to bblayers.conf, but only if
+the are actually present.
