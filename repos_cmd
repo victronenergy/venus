@@ -6,5 +6,9 @@ PATH="$PWD:$PATH"
 echo "----------------- $@ -----------------------"
 repos=`find sources -mindepth 1 -maxdepth 1 -type d  ! -path '*.*'`
 
+if [ -d "install" ]; then
+	repos="${repos} install"
+fi
+
 for repo in $repos; do echo; echo $repo:; cd "$root/$repo" && eval "$@"; done; cd $root
 echo
