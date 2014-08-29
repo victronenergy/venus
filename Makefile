@@ -11,7 +11,7 @@ build/conf/bblayers.conf:
 	@echo '"' >> build/conf/bblayers.conf
 
 bb: build/conf/bblayers.conf
-	@bash . ./sources/openembedded-core/oe-init-build-env build
+	@bash --init-file sources/openembedded-core/oe-init-build-env
 
 clean:
 	@rm -rf build/tmp-eglibc
