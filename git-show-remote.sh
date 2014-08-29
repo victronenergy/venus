@@ -5,6 +5,17 @@ if [ "$#" -ne 1 ]; then
 	exit 1
 fi
 
-echo "$1 `git config --get remote.origin.url` `git config --get remote.origin.pushurl`"
+url=`git config --get remote.origin.url`
+pushurl=`git config --get remote.origin.pushurl`
+if [ "$pushurl" = "" ]; then
+	pushurl=$url
+fi
+
+upstream=`git config --get remote.upstream.url`
+if [ "$upstream" = "" ]; then
+	upstream="-"
+fi
+
+echo "$1 $url $pushurl $upstream"
 
 

@@ -33,5 +33,5 @@ install:
 	@cd install && make prod && make recover
 
 repos.conf:
-	conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
+	@conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 

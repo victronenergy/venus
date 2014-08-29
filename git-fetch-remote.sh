@@ -1,11 +1,16 @@
 #!/bin/sh
 
-if [ "$#" -lt 2 ]; then
-	echo $0 directory fetch-url [push-url]
+if [ $# -lt 4 ]; then
+	echo "$0 directory fetch-url push-url (upstream|-)"
 	exit 1
 fi
 
 git clone $2 $1
-if [ "$#" -eq 3 ]; then
-	git --git-dir=$1/.git remote set-url --push origin $3
+
+# set the upstream to push changes back
+git --git-dir=$1/.git remote set-url --push origin $3
+
+# optionally set an upstream repository
+if [ "$4" != "-" ]; then
+	git --git-dir=$1/.git remote add upstream $4
 fi
