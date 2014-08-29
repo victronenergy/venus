@@ -1,0 +1,6 @@
+bitbake.lock
+conf/bblayers.conf
+conf/sanity_info
+pseudodone
+sstate-cache
+tmp-eglibc
