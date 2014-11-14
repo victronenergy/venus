@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean distclean fetch fetch-all install repos.conf
+.PHONY: bb ccgx clean distclean fetch fetch-all install repos.conf sdk
 
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
@@ -35,3 +35,5 @@ install:
 repos.conf:
 	@conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 
+sdk:
+	. ./sources/openembedded-core/oe-init-build-env build && bitbake meta-toolchain-qte
