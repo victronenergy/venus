@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean distclean fetch fetch-all install repos.conf sdk
+.PHONY: bb ccgx clean distclean fetch fetch-all install repos.conf sdk ve-image
 
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
@@ -25,9 +25,16 @@ ccgx: build/conf/bblayers.conf
 distclean: clean
 	@rm -rf downloads
 
+fetch:
+	grep -ve "git.victronenergy.com" repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
+
 fetch-all:
 	@rm -f build/conf/bblayers.conf
 	@while read p; do ./git-fetch-remote.sh $$p; done <repos.conf
+
+# note: different MACHINE as this build a live image as well
+ve-image: build/conf/bblayers.conf
+	export MACHINE=ccgx && . ./sources/openembedded-core/oe-init-build-env build && bitbake ve-image
 
 install:
 	@cd install && make prod && make recover
