@@ -31,13 +31,14 @@ make fetch
 # build all, this will take a while though...
 make ve-image
 
-# burn the obatined image to a sd card
+# burn the obtained image to a sd card
 gunzip -c deploy/images/ve-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
 
 The image can be booted by holding the left button on the central pad,
-while restarting the ccgx. The login is symply root, without a password
-(obviously to be used in a safe environment). To get a console on the LCD
-type `modprobe fbcon`.
+while restarting the ccgx (the screen will turn blue for a while when
+booting from the card). The login is symply root without a password
+(obviously to be used in a safe environment). For ssh to work a valid
+passwd must be set.
 
 === For a complete build ===
 
