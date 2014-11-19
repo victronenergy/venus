@@ -13,9 +13,33 @@ bitbake to fetch, compile sources. For a complete build you need
 to have access to private repro of Victron Energy, but generic
 images should compile fine without them.
 
-TODO: instructions to do so..
+=== For a live image which can be booted from e.g. the sd card ===
 
-For a complete build:
+# clone this repository with:
+git clone https://github.com/victronenergy/venus.git
+
+# fetch needed subtrees
+cd venus
+make fetch
+
+# don't forget! switch all branches to a correct version, e.g.:
+./repos checkout danny_venus
+
+# XXX: make depend would be handy here.. For now just apt-get
+# till it stops complaining about missing tools!.
+
+# build all, this will take a while though...
+make ve-image
+
+# burn the obatined image to a sd card
+gunzip -c deploy/images/ve-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
+
+The image can be booted by holding the left button on the central pad,
+while restarting the ccgx. The login is symply root, without a password
+(obviously to be used in a safe environment). To get a console on the LCD
+type `modprobe fbcon`.
+
+=== For a complete build ===
 
 # install ssh keys for github / gitlab etc
 make fetch-all
