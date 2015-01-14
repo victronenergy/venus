@@ -39,6 +39,12 @@ ve-image: build/conf/bblayers.conf
 install:
 	@cd install && make prod && make recover
 
+prereq:
+	@sudo apt-get install sed wget cvs subversion git-core \
+		coreutils unzip texi2html texinfo docbook-utils \
+		gawk python-pysqlite2 diffstat help2man make gcc build-essential g++ \
+		desktop-file-utils chrpath u-boot-tools imagemagick
+
 repos.conf:
 	@conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 
