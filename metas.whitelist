@@ -4,4 +4,5 @@ sources/meta-openembedded/meta-oe
 sources/meta-openembedded/meta-webserver
 sources/meta-victronenergy
 sources/meta-victronenergy-overlay
+sources/meta-victronenergy-private
 sources/openembedded-core/meta
