@@ -48,5 +48,5 @@ prereq:
 repos.conf:
 	@conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 
-sdk:
+sdk: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build && bitbake meta-toolchain-qte
