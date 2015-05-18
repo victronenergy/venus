@@ -1,4 +1,5 @@
 sources/meta-ccgx
+sources/meta-fsl-arm
 sources/meta-openembedded/meta-multimedia
 sources/meta-openembedded/meta-networking
 sources/meta-openembedded/meta-oe
