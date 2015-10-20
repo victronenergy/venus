@@ -3,6 +3,7 @@ sources/meta-fsl-arm
 sources/meta-openembedded/meta-multimedia
 sources/meta-openembedded/meta-networking
 sources/meta-openembedded/meta-oe
+sources/meta-openembedded/meta-python
 sources/meta-openembedded/meta-webserver
 sources/meta-victronenergy
 sources/meta-victronenergy-overlay
