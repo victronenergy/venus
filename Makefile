@@ -15,6 +15,7 @@ bb: build/conf/bblayers.conf
 
 clean:
 	@rm -rf build/tmp-eglibc
+	@rm -rf build/tmp-glibc
 	@rm -rf build/sstate-cache
 	@rm -rf deploy
 	@rm -f build/conf/bblayers.conf
