@@ -4,9 +4,9 @@ The problematic part with this name is that it is from the Roman
 mythology and not as most of our products from the Greek. Phoenix
 is already taken though by a charger...
 
-First of all, in general you don't want to rebuild a complete rootfs,
+First of all, make sure you really want to rebuild a complete rootfs,
 it takes time to compile, lots of diskspace and results in an
-image / sdk already provide in binary form.
+image / sdk which already available anyway, in binary form.
 
 Anyway, if you insists.. This repo contains some wrapper around
 bitbake to fetch, compile sources. For a complete build you need
@@ -36,9 +36,12 @@ gunzip -c deploy/images/ve-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1
 
 The image can be booted by holding the left button on the central pad,
 while restarting the ccgx (the screen will turn blue for a while when
-booting from the card). The login is simply root without a password
-(obviously to be used in a safe environment). For ssh to work a valid
-passwd must be set.
+booting from the card).
+
+To connect to the ccgx, use a modified VE.Direct USB cable and plug it
+into VE.Direct port 1 which is the console. Baudrate is 115k2. The login
+is simply root, without a password. Obviously to be used only in a safe
+environment. For ssh to work a valid passwd must be set first.
 
 === For a complete build ===
 
