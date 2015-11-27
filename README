@@ -1,19 +1,37 @@
 Venus: synonym for Victron Energy Unix like distro with a linux kernel
 
 The problematic part with this name is that it is from the Roman
-mythology and not as most of our products from the Greek. Phoenix
+mythology and not, as most of our products, from the Greek. Phoenix
 is already taken though by a charger...
 
 First of all, make sure you really want to rebuild a complete rootfs,
 it takes time to compile, lots of diskspace and results in an
 image / sdk which already available anyway, in binary form.
 
-Anyway, if you insists.. This repo contains some wrapper around
-bitbake to fetch, compile sources. For a complete build you need
-to have access to private repro of Victron Energy, but generic
-images should compile fine without them.
+Anyway, if you insist: this repo contains some wrapper functions
+around bitbake and git to fetch, and compile sources.
 
-=== For a live image which can be booted from e.g. the sd card ===
+For a complete build (make ccgx) you need to have access to private
+repros of Victron Energy. The live image (make ve-image) compiles
+fine without them.
+
+Note: repos is just like git submodule foreach -q git, but shorter,
+so you can do:
+
+./repos push origin danny_venus
+./repos tag xyz
+
+it will push all, tag all etc. Likewise you can revert to a certain
+revision with:
+
+./repos checkout tagname
+
+The repos.conf file contains the repositories which need to be checked
+out. It can be rebuild with make repos.conf. metas.whitelist contains
+the meta directory which will be added to bblayers.conf, but only if
+they are actually present.
+
+=== Live image which can be booted from e.g. the sd card ===
 
 # clone this repository with:
 git clone https://github.com/victronenergy/venus.git
@@ -43,24 +61,9 @@ into VE.Direct port 1 which is the console. Baudrate is 115k2. The login
 is simply root, without a password. Obviously to be used only in a safe
 environment. For ssh to work a valid passwd must be set first.
 
-=== For a complete build ===
+=== Complete build ===
 
 # install ssh keys for github / gitlab etc
 make fetch-all
 ./repos checkout danny_venus
 make ccgx
-
-Note: repos is just like git submodule foreach -q git,
-but shorter, so you can just do:
-./repos push origin danny_venus
-./repos tag xyz
-
-it will push all, tag all etc. Likewise you can revert to a certain
-revision with:
-
-./repos checkout tagname
-
-The repos.conf file contains the repositories which need to be checked
-out. It can be rebuild with make repos.conf. metas.whitelist contains
-the meta directory which will be added to bblayers.conf, but only if
-they are actually present.
