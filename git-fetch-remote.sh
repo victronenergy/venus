@@ -14,3 +14,12 @@ git --git-dir=$1/.git remote set-url --push origin $3
 if [ "$4" != "-" ]; then
 	git --git-dir=$1/.git remote add upstream $4
 fi
+
+# optionally set an upstream repository
+if [ "$5" != "-" ]; then
+        git checkout -b "$5"
+fi
+
+if [ "$6" != "-" ]; then
+        git branch -u "$6"
+fi
