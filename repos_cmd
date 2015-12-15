@@ -2,13 +2,25 @@
 
 root=$PWD;
 PATH="$PWD:$PATH"
+DOECHO=1
 
-echo "----------------- $@ -----------------------"
+do_echo() {
+	if [ ${DOECHO} -eq 1 ]; then
+		echo "$@"
+	fi
+}
+
+if [ "${1}" = "-q" ]; then
+        DOECHO=0
+        shift
+fi
+
+do_echo "----------------- $@ -----------------------"
 repos=`find sources -mindepth 1 -maxdepth 1 -type d  ! -path '*.*'`
 
 if [ -d "install" ]; then
 	repos="${repos} install"
 fi
 
-for repo in $repos; do echo; echo $repo:; cd "$root/$repo" && eval "$@"; done; cd $root
-echo
+for repo in $repos; do do_echo; do_echo $repo:; cd "$root/$repo" && eval "$@"; done; cd $root
+do_echo
