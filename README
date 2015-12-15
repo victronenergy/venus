@@ -67,3 +67,21 @@ environment. For ssh to work a valid passwd must be set first.
 make fetch-all
 ./repos checkout danny_venus
 make ccgx
+
+
+=== managing git remotes and branches ====
+
+The repos command iterates over all repository in sources. To add a new repository
+put it in sources, checkout the branch you want and set an upstream branch. This
+can be made permanent with: `make repos.conf`
+The directories you want to use from the new repository must be added to metas.whitelist.
+
+# patches not in upstream yet
+./repos cherry -v
+
+# local changes with respect to upstream
+./repos diff @{u}
+
+# local changes with respect to the push branch
+./repos diff 'origin/`git rev-parse --abbrev-ref HEAD`'
+or if you have git 2.5+ ./repos diff @{push}
