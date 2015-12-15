@@ -16,6 +16,9 @@ if [ "$upstream" = "" ]; then
 	upstream="-"
 fi
 
-echo "$1 $url $pushurl $upstream"
+branch=`git rev-parse --abbrev-ref HEAD`
+upstream_branch=`git rev-parse --abbrev-ref @{upstream}`
+
+echo "$1 $url $pushurl $upstream $branch $upstream_branch"
 
 
