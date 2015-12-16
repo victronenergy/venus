@@ -1,5 +1,7 @@
 .PHONY: achilles bb ccgx clean distclean fetch fetch-all install repos.conf sdk ve-image
 
+CONF = repos.conf
+
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
 	@echo 'BBPATH = "$${TOPDIR}"' >> build/conf/bblayers.conf
@@ -31,7 +33,7 @@ fetch:
 
 fetch-all:
 	@rm -f build/conf/bblayers.conf
-	@while read p; do ./git-fetch-remote.sh $$p; done <repos.conf
+	@while read p; do ./git-fetch-remote.sh $$p; done <${CONF}
 
 achilles: build/conf/bblayers.conf
 	export MACHINE=achilles && . ./sources/openembedded-core/oe-init-build-env build && bitbake achilles-rootfs
