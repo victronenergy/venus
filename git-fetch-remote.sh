@@ -5,7 +5,7 @@ if [ $# -lt 4 ]; then
 	exit 1
 fi
 
-git clone $2 $1
+git clone --no-checkout $2 $1
 
 # set the upstream to push changes back
 git --git-dir=$1/.git remote set-url --push origin $3
@@ -17,9 +17,9 @@ fi
 
 # optionally set an upstream repository
 if [ "$5" != "-" ]; then
-        git checkout -b "$5"
+	git --git-dir=$1/.git --work-tree=$1 checkout "$5"
 fi
 
 if [ "$6" != "-" ]; then
-        git branch -u "$6"
+	git --git-dir=$1/.git --work-tree=$1 branch -u "$6"
 fi
