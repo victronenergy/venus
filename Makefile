@@ -39,8 +39,8 @@ achilles: build/conf/bblayers.conf
 	export MACHINE=achilles && . ./sources/openembedded-core/oe-init-build-env build && bitbake achilles-rootfs
 
 # note: different MACHINE as this build a live image as well
-ve-image: build/conf/bblayers.conf
-	export MACHINE=ccgx && . ./sources/openembedded-core/oe-init-build-env build && bitbake ve-image
+venus-image: build/conf/bblayers.conf
+	export MACHINE=ccgx && . ./sources/openembedded-core/oe-init-build-env build && bitbake venus-image
 
 install:
 	@cd install && make prod && make recover

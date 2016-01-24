@@ -47,10 +47,10 @@ make fetch
 make prereq
 
 # build all, this will take a while though...
-make ve-image
+make venus-image
 
 # burn the obtained image to a sd card
-gunzip -c deploy/images/ve-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
+gunzip -c deploy/images/venus-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
 
 The image can be booted by holding the left button on the central pad,
 while restarting the ccgx (the screen will turn blue for a while when
