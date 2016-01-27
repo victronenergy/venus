@@ -18,7 +18,7 @@ fine without them.
 Note: repos is just like git submodule foreach -q git, but shorter,
 so you can do:
 
-./repos push origin danny_venus
+./repos push origin
 ./repos tag xyz
 
 it will push all, tag all etc. Likewise you can revert to a certain
@@ -27,9 +27,9 @@ revision with:
 ./repos checkout tagname
 
 The repos.conf file contains the repositories which need to be checked
-out. It can be rebuild with make repos.conf. metas.whitelist contains
-the meta directory which will be added to bblayers.conf, but only if
-they are actually present.
+out. It can be rebuild with make update-repos.conf. metas.whitelist
+contains the meta directory which will be added to bblayers.conf, but
+only if they are actually present.
 
 === Live image which can be booted from e.g. the sd card ===
 
@@ -39,9 +39,6 @@ git clone https://github.com/victronenergy/venus.git
 # fetch needed subtrees
 cd venus
 make fetch
-
-# don't forget! switch all branches to a correct version, e.g.:
-./repos checkout danny_venus
 
 # install host packages (Debian based)
 make prereq
@@ -65,9 +62,15 @@ environment. For ssh to work a valid passwd must be set first.
 
 # install ssh keys for github / gitlab etc
 make fetch-all
-./repos checkout danny_venus
 make ccgx
 
+=== other configurations ===
+Above instructions checkout the version as used for the ccgx release as distributed.
+Alternative setups can also be used, e.g. to build for a newer OE version use e.g.:
+
+make CONF=conf/ccgx-fido.conf fetch-all
+
+The directory conf contains the supported configurations.
 
 === managing git remotes and branches ====
 
