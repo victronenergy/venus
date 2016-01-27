@@ -1,6 +1,6 @@
-.PHONY: achilles bb ccgx clean distclean fetch fetch-all install repos.conf sdk ve-image
+.PHONY: achilles bb ccgx clean distclean fetch fetch-all install update-repos.conf sdk ve-image
 
-CONF = repos.conf
+CONF = conf/ccgx-danny.conf
 
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
@@ -28,10 +28,10 @@ ccgx: build/conf/bblayers.conf
 distclean: clean
 	@rm -rf downloads
 
-fetch:
+fetch: repos.conf
 	grep -ve "git.victronenergy.com" repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
 
-fetch-all:
+fetch-all: repos.conf
 	@rm -f build/conf/bblayers.conf
 	@while read p; do ./git-fetch-remote.sh $$p; done <${CONF}
 
@@ -52,6 +52,9 @@ prereq:
 		desktop-file-utils chrpath u-boot-tools imagemagick
 
 repos.conf:
+	ln -s $(CONF) repos.conf
+
+update-repos.conf:
 	@conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 
 sdk: build/conf/bblayers.conf
