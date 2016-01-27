@@ -1,4 +1,5 @@
 Venus: synonym for Victron Energy Unix like distro with a linux kernel
+----------------------------------------------------------------------
 
 The problematic part with this name is that it is from the Roman
 mythology and not, as most of our products, from the Greek. Phoenix
@@ -71,6 +72,14 @@ Alternative setups can also be used, e.g. to build for a newer OE version use e.
 make CONF=conf/ccgx-fido.conf fetch-all
 
 The directory conf contains the supported configurations.
+
+=== fiddling around ===
+`make bb` will source the oe-environment and bring you to shell with a modified
+environment. In this shell bitbake can be called to do any custom action, e.g.
+bitbake -c cleansstate or bitbake [recipe] etc.
+
+Note: it will default to MACHINE=bpp3, when building for another one, don't forget
+to set MACHINE!
 
 === managing git remotes and branches ====
 
