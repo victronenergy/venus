@@ -55,7 +55,7 @@ repos.conf:
 	ln -s $(CONF) repos.conf
 
 update-repos.conf:
-	@conf=$$PWD/repos.conf; rm $$conf; ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
+	@conf=$$PWD/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 
 sdk: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build && bitbake meta-toolchain-qte
