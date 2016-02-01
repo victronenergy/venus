@@ -13,4 +13,5 @@ sources/meta-victronenergy/meta-third-party
 sources/meta-victronenergy/meta-venus
 sources/meta-victronenergy/meta-ve-software
 sources/meta-victronenergy-private
+sources/meta-yocto/meta-yocto/meta-yocto-bsp
 sources/openembedded-core/meta
