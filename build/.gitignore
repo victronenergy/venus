@@ -1,6 +1,9 @@
 bitbake.lock
+cache/
 conf/bblayers.conf
 conf/sanity_info
+conf/templateconf.cfg
 pseudodone
 sstate-cache
 tmp-eglibc
+tmp-glibc
