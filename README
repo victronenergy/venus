@@ -50,7 +50,7 @@ make prereq
 
 # build all, this will take a while though... it builds for all MACHINES as found
 # in conf/machines.
-make venus-image
+make ccgx-venus-image
 
 # to build for a specific machine, it can be prefixed, e.g. building the image only
 # for the beaglebone is done with:
