@@ -1,6 +1,8 @@
-.PHONY: achilles bb ccgx clean distclean fetch fetch-all install update-repos.conf sdk ve-image
+.PHONY: bb ccgx clean fetch fetch-all install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
 
-CONF = conf/ccgx-danny.conf
+CONFIG = danny
+
+-include conf/machines
 
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
@@ -11,6 +13,9 @@ build/conf/bblayers.conf:
 	@find . -wholename "*/conf/layer.conf" | sed -e 's,/conf/layer.conf,,g' -e 's,^./,,g' | sort > metas.found
 	@comm -1 -2 metas.found metas.whitelist | sed -e 's,$$, \\,g' -e "s,^,$$PWD/,g" >> build/conf/bblayers.conf
 	@echo '"' >> build/conf/bblayers.conf
+
+%-bb:
+	@export MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
 
 bb: build/conf/bblayers.conf
 	@bash --init-file sources/openembedded-core/oe-init-build-env
@@ -25,22 +30,18 @@ clean:
 ccgx: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build && bitbake bpp3-rootfs
 
-distclean: clean
-	@rm -rf downloads
+conf:
+	ln -s configs/$(CONFIG) conf
 
-fetch: repos.conf
-	grep -ve "git.victronenergy.com" repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
+conf/machines: conf
+conf/repos.conf: conf
 
-fetch-all: repos.conf
+fetch: conf/repos.conf
+	grep -ve "git.victronenergy.com" conf/repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
+
+fetch-all: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
 	@while read p; do ./git-fetch-remote.sh $$p; done <${CONF}
-
-achilles: build/conf/bblayers.conf
-	export MACHINE=achilles && . ./sources/openembedded-core/oe-init-build-env build && bitbake achilles-rootfs
-
-# note: different MACHINE as this build a live image as well
-venus-image: build/conf/bblayers.conf
-	export MACHINE=ccgx && . ./sources/openembedded-core/oe-init-build-env build && bitbake venus-image
 
 install:
 	@cd install && make prod && make recover
@@ -51,11 +52,13 @@ prereq:
 		gawk python-pysqlite2 diffstat help2man make gcc build-essential g++ \
 		desktop-file-utils chrpath u-boot-tools imagemagick
 
-repos.conf:
-	ln -s $(CONF) repos.conf
-
-update-repos.conf:
-	@conf=$$PWD/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
-
 sdk: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build && bitbake meta-toolchain-qte
+
+update-repos.conf:
+	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
+
+%-venus-image: build/conf/bblayers.conf
+	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build && bitbake venus-image
+
+venus-image: $(addsuffix -venus-image,$(MACHINES))
