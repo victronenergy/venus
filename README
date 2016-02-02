@@ -13,7 +13,7 @@ Anyway, if you insist: this repo contains some wrapper functions
 around bitbake and git to fetch, and compile sources.
 
 For a complete build (make ccgx) you need to have access to private
-repros of Victron Energy. The live image (make ve-image) compiles
+repros of Victron Energy. The live image (make venus-image) compiles
 fine without them.
 
 Note: repos is just like git submodule foreach -q git, but shorter,
@@ -27,8 +27,12 @@ revision with:
 
 ./repos checkout tagname
 
-The repos.conf file contains the repositories which need to be checked
-out. It can be rebuild with make update-repos.conf. metas.whitelist
+The repos.conf files in the configs/* directories contains the repositories
+which need to be checked out. One of them can be selected with e.g.
+
+make CONFIG=jethro conf
+
+It can be rebuild with make update-repos.conf. metas.whitelist
 contains the meta directory which will be added to bblayers.conf, but
 only if they are actually present.
 
@@ -44,22 +48,18 @@ make fetch
 # install host packages (Debian based)
 make prereq
 
-# build all, this will take a while though...
+# build all, this will take a while though... it builds for all MACHINES as found
+# in conf/machines.
 make venus-image
+
+# to build for a specific machine, it can be prefixed, e.g. building the image only
+# for the beaglebone is done with:
+make beaglebone-venus-image
 
 # burn the obtained image to a sd card
 gunzip -c deploy/images/venus-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
 
-The image can be booted by holding the left button on the central pad,
-while restarting the ccgx (the screen will turn blue for a while when
-booting from the card).
-
-To connect to the ccgx, use a modified VE.Direct USB cable and plug it
-into VE.Direct port 1 which is the console. Baudrate is 115k2. The login
-is simply root, without a password. Obviously to be used only in a safe
-environment. For ssh to work a valid passwd must be set first.
-
-=== Complete build ===
+=== Complete build for the ccgx ===
 
 # install ssh keys for github / gitlab etc
 make fetch-all
@@ -69,7 +69,7 @@ make ccgx
 Above instructions checkout the version as used for the ccgx release as distributed.
 Alternative setups can also be used, e.g. to build for a newer OE version use e.g.:
 
-make CONF=conf/ccgx-fido.conf fetch-all
+make CONFIG=fido fetch-all
 
 The directory conf contains the supported configurations.
 
@@ -79,7 +79,7 @@ environment. In this shell bitbake can be called to do any custom action, e.g.
 bitbake -c cleansstate or bitbake [recipe] etc.
 
 Note: it will default to MACHINE=bpp3, when building for another one, don't forget
-to set MACHINE!
+to set MACHINE or prefix it, e.g. make ccgx-bb, wil set MACHINE to ccgx.
 
 === managing git remotes and branches ====
 
@@ -97,3 +97,13 @@ The directories you want to use from the new repository must be added to metas.w
 # local changes with respect to the push branch
 ./repos diff 'origin/`git rev-parse --abbrev-ref HEAD`'
 or if you have git 2.5+ ./repos diff @{push}
+
+==== ccgx specific =====
+The image can be booted by holding the left button on the central pad,
+while restarting the ccgx (the screen will turn blue for a while when
+booting from the card).
+
+To connect to the ccgx, use a modified VE.Direct USB cable and plug it
+into VE.Direct port 1 which is the console. Baudrate is 115k2. The login
+is simply root, without a password. Obviously to be used only in a safe
+environment. For ssh to work a valid passwd must be set first.
