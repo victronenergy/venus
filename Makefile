@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean fetch fetch-all install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
+.PHONY: bb ccgx clean conf fetch fetch-all install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
 
 CONFIG = danny
 
@@ -31,7 +31,7 @@ ccgx: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build && bitbake bpp3-rootfs
 
 conf:
-	ln -s configs/$(CONFIG) conf
+	ln -sfn configs/$(CONFIG) conf
 
 conf/machines: conf
 conf/repos.conf: conf
