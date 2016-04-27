@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean conf fetch fetch-all install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
+.PHONY: build/conf/bblayers.conf bb ccgx clean conf fetch fetch-all install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
 
 CONFIG = danny
 
