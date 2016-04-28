@@ -42,7 +42,7 @@ fetch: conf/repos.conf
 
 fetch-all: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
-	@while read p; do ./git-fetch-remote.sh $$p; done <${CONF}
+	@while read p; do ./git-fetch-remote.sh $$p; done <conf/repos.conf
 
 install:
 	@cd install && make prod && make recover
