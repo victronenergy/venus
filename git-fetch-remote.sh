@@ -15,13 +15,15 @@ git --git-dir=$1/.git remote set-url --push origin $3
 # optionally set an upstream repository
 if [ "$4" != "-" ]; then
 	git --git-dir=$1/.git remote add upstream $4
+	git --git-dir=$1/.git --work-tree=$1 fetch upstream
 fi
 
-# optionally set an upstream repository
+# optionally checkout a specific branch
 if [ "$5" != "-" ]; then
 	git --git-dir=$1/.git --work-tree=$1 checkout "$5"
 fi
 
+# optionally set a specific upstream branch
 if [ "$6" != "-" ]; then
 	git --git-dir=$1/.git --work-tree=$1 branch -u "$6"
 fi
