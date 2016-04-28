@@ -28,7 +28,7 @@ clean:
 	@rm -f build/conf/bblayers.conf
 
 ccgx: build/conf/bblayers.conf
-	. ./sources/openembedded-core/oe-init-build-env build && bitbake bpp3-rootfs
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake bpp3-rootfs
 
 conf:
 	ln -s configs/$(CONFIG) conf
@@ -54,12 +54,12 @@ prereq:
 		desktop-file-utils chrpath u-boot-tools imagemagick
 
 sdk: build/conf/bblayers.conf
-	. ./sources/openembedded-core/oe-init-build-env build && bitbake meta-toolchain-qte
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
 
 update-repos.conf:
 	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
 
 %-venus-image: build/conf/bblayers.conf
-	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build && bitbake venus-image
+	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
 
 venus-image: $(addsuffix -venus-image,$(MACHINES))
