@@ -1,6 +1,6 @@
 #!/bin/sh
 
-printf "\n--------------- $1 - $2 -------------"
+printf "\n--------------- $1 - $2 -------------\n"
 
 if [ $# -lt 4 ]; then
 	echo "$0 directory fetch-url push-url (upstream|-)"
