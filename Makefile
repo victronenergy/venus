@@ -15,6 +15,9 @@ build/conf/bblayers.conf:
 	@comm -1 -2 metas.found metas.whitelist.sorted.tmp | sed -e 's,$$, \\,g' -e "s,^,$$PWD/,g" >> build/conf/bblayers.conf
 	@rm metas.whitelist.sorted.tmp
 	@echo '"' >> build/conf/bblayers.conf
+ifdef DL_DIR
+	@echo 'DL_DIR = "${DL_DIR}"' >> build/conf/bblayers.conf
+endif
 
 %-bb:
 	@export MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
