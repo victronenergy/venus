@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean fetch fetch-all install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
+.PHONY: bb ccgx clean fetch fetch-all fetch-install install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES))
 
 CONFIG = danny
 
@@ -49,6 +49,9 @@ fetch-all: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
 	@while read p; do ./git-fetch-remote.sh $$p; done <conf/repos.conf
 
+fetch-install:
+	git clone git@git.victronenergy.com:ccgx/install.git
+
 install:
 	@cd install && make prod && make recover
 
@@ -62,7 +65,7 @@ sdk: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
 
 update-repos.conf:
-	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf"
+	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf" && sed -i -e '/^install /d' $$conf
 
 %-venus-image: build/conf/bblayers.conf
 	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
