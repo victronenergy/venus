@@ -20,10 +20,10 @@ ifdef DL_DIR
 endif
 
 %-bb:
-	@export MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
+	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
 
 bb: build/conf/bblayers.conf
-	@bash --init-file sources/openembedded-core/oe-init-build-env
+	@export BITBAKEDIR=sources/bitbake && bash --init-file sources/openembedded-core/oe-init-build-env
 
 clean:
 	@rm -rf build/tmp-eglibc
