@@ -1,0 +1,87 @@
+# Todo:
+# - Add SDK
+
+# Usage tips:
+# - working on something, and need that to be built first? Temporarily, insert
+#   a stage before the others.
+# - to make gitlab skip jobs, prepend its name with . (a dot).
+# - don't forget the dependencies: [] setting. It fixes artifacts being passed
+#   on from one stage to the next. See note for more info:
+#   https://gitlab.com/gitlab-org/gitlab-ce/issues/3423#note_4714661
+# - gitlab: don't forget to set the builds option to clone instead of git fetch
+#   see Project Settings -> Builds. Fixes issues new builds not being 100%
+#   clean builds.
+# - In Project Settings you can also increase the max build time, default 60
+#   minutes, to, for example, 180 minutes. 
+
+stages:
+  - build-danny-ccgx-full
+  - build-packages
+  - build-danny-ccgx-opensource
+
+build-danny-ccgx-full:
+  script:
+    - make CONFIG=danny fetch-all ccgx install
+    - rm deploy/venus/images/*.ubifs
+  stage: build-danny-ccgx-full
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/venus/images
+    - install/*.zip
+  dependencies: []
+
+build-danny-ccgx-opensource:
+  # This stage could be build immediately after the full version, saves time.
+  # But that changes things too, the private metas will still be applied.
+  # Therefore we do a clean build, making sure that John Doe on the internet
+  # can build the image from scratch, and that the result is the same.
+  script:
+    - make CONFIG=danny fetch ccgx-venus-image
+    - rm deploy/venus/images/*.ubifs
+  stage: build-danny-ccgx-opensource
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/venus/images
+  dependencies: []
+
+build-raspbian-wheezy:
+  script: "./build-raspbian-debs.sh wheezy"
+  stage: build-packages
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/raspbian-wheezy/reprepro
+  dependencies: []
+  when: always
+
+build-raspbian-jessie:
+  script: "./build-raspbian-debs.sh jessie"
+  stage: build-packages
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/raspbian-jessie/reprepro
+  dependencies: []
+  when: always
+
+build-debian-jessie:
+  script: "./build-debian-debs.sh"
+  stage: build-packages
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/debian-jessie/reprepro
+  dependencies: []
+  when: always
