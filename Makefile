@@ -53,7 +53,7 @@ fetch-install:
 	git clone git@git.victronenergy.com:ccgx/install.git
 
 install:
-	@cd install && make prod && make recover
+	@cd sources/meta-ccgx/scripts/install && make prod && make recover
 
 prereq:
 	@sudo apt-get install sed wget cvs subversion git-core \
