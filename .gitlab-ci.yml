@@ -18,6 +18,7 @@ stages:
   - build-danny-ccgx-full
   - build-packages
   - build-danny-ccgx-opensource
+  - build-sdk
 
 build-danny-ccgx-full:
   script:
@@ -83,5 +84,17 @@ build-debian-jessie:
   artifacts:
     paths:
     - deploy/debian-jessie/reprepro
+  dependencies: []
+  when: always
+
+build-sdk:
+  script: "make CONFIG=danny fetch sdk"
+  stage: build-sdk
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/venus/sdk
   dependencies: []
   when: always
