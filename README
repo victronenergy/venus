@@ -113,3 +113,7 @@ To connect to the ccgx, use a modified VE.Direct USB cable and plug it
 into VE.Direct port 1 which is the console. Baudrate is 115k2. The login
 is simply root, without a password. Obviously to be used only in a safe
 environment. For ssh to work a valid passwd must be set first.
+
+=== sdk rebuild ===
+Changing the distro version can cause some sdk packages fail to compile, this should fix that
+bitbake -c cleanall nativesdk-gettext nativesdk-gmp nativesdk-gdbm nativesdk-glib-2.0 nativesdk-qt4-tools
