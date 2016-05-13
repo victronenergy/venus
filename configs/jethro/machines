@@ -1,1 +1,1 @@
-MACHINES=beaglebone ccgx
+MACHINES=achilles beaglebone ccgx
