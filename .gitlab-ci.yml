@@ -16,6 +16,7 @@
 
 stages:
   - build-danny-ccgx-full
+  - build-jethro-full
   - build-packages
   - build-danny-ccgx-opensource
   - build-sdk
@@ -32,6 +33,18 @@ build-danny-ccgx-full:
     paths:
     - deploy/venus/images
     - install/*.zip
+  dependencies: []
+
+build-jethro-full:
+  script:
+    - make CONFIG=jethro fetch-all && make venus-image
+  stage: build-jethro-full
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/venus
   dependencies: []
 
 build-danny-ccgx-opensource:
