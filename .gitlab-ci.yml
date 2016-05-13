@@ -1,6 +1,6 @@
 # Usage tips:
 # - working on something, and need that to be built first? Temporarily, insert
-#   a stage before the others.
+#   a stage before the others. Or temporarily change danny and other configs.
 # - to make gitlab skip jobs, prepend its name with . (a dot).
 # - don't forget the dependencies: [] setting. It fixes artifacts being passed
 #   on from one stage to the next. See note for more info:
@@ -15,12 +15,12 @@ stages:
   - build-danny-ccgx-full
   - build-jethro-full
   - build-packages
-  - build-danny-ccgx-opensource
   - build-sdk
+  - build-danny-ccgx-opensource
 
 build-danny-ccgx-full:
   script:
-    - make CONFIG=danny fetch-all ccgx install
+    - make CONFIG=danny fetch-full ccgx install
     - rm deploy/venus/images/*.ubifs
     - ./sync-deploy-to-build-feeds.sh
   stage: build-danny-ccgx-full
@@ -35,7 +35,7 @@ build-danny-ccgx-full:
 
 build-jethro-full:
   script:
-    - make CONFIG=jethro fetch-all && make venus-image
+    - make CONFIG=jethro fetch-full && make venus-full
     - ./sync-deploy-to-build-feeds.sh
   stage: build-jethro-full
   tags:
@@ -52,7 +52,9 @@ build-danny-ccgx-opensource:
   # Therefore we do a clean build, making sure that John Doe on the internet
   # can build the image from scratch, and that the result is the same.
   script:
-    - make CONFIG=danny fetch ccgx-venus-image
+    # write down all machine names since simply venus-opensource does not work
+    # on the build server
+    - make CONFIG=danny fetch-opensource ccgx-venus-opensource
     - rm deploy/venus/images/*.ubifs
     - ./sync-deploy-to-build-feeds.sh
   stage: build-danny-ccgx-opensource
@@ -108,7 +110,7 @@ build-debian-jessie:
 
 build-sdk:
   script:
-    - make CONFIG=danny fetch sdk
+    - make CONFIG=danny fetch-opensource sdk
     - ./sync-deploy-to-build-feeds.sh
   stage: build-sdk
   tags:

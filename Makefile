@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean fetch fetch-all fetch-install install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb ccgx clean fetch-full fetch-opensource fetch-install install update-repos.conf sdk venus-full venus-opensource $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-full,$(MACHINES)) $(addsuffix -venus-opensource,$(MACHINES))
 
 CONFIG = danny
 
@@ -32,6 +32,7 @@ clean:
 	@rm -rf deploy
 	@rm -f build/conf/bblayers.conf
 
+# Use only for bpp3 old style build. New machines should use the venus-full image, see below!
 ccgx: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake bpp3-rootfs
 
@@ -41,11 +42,11 @@ conf:
 conf/machines: conf
 conf/repos.conf: conf
 
-fetch: conf/repos.conf
+fetch-opensource: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
 	@grep -ve "git.victronenergy.com" conf/repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
 
-fetch-all: conf/repos.conf
+fetch-full: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
 	@while read p; do ./git-fetch-remote.sh $$p; done <conf/repos.conf
 
@@ -67,7 +68,12 @@ sdk: build/conf/bblayers.conf
 update-repos.conf:
 	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf" && sed -i -e '/^install /d' $$conf
 
-%-venus-image: build/conf/bblayers.conf
-	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
+%-venus-full: build/conf/bblayers.conf
+	export MACHINE=$(subst -venus-full,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-full-image
 
-venus-image: $(addsuffix -venus-image,$(MACHINES))
+venus-full: $(addsuffix -venus-full,$(MACHINES))
+
+%-venus-opensource: build/conf/bblayers.conf
+	export MACHINE=$(subst -venus-opensource,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-opensource-image
+
+venus-opensource: $(addsuffix -venus-opensource,$(MACHINES))
