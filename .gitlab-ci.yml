@@ -43,7 +43,7 @@ build-jethro-full:
     - linux
   artifacts:
     paths:
-    - deploy/venus
+    - deploy/venus/images
   dependencies: []
 
 build-danny-ccgx-opensource:
