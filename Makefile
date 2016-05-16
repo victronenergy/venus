@@ -38,6 +38,10 @@ ccgx: build/conf/bblayers.conf
 conf:
 	ln -s configs/$(CONFIG) conf
 
+reconf:
+	if [ -f build/conf/bblayers.conf ]; then rm build/conf/bblayers.conf; fi
+	ln -sf configs/$(CONFIG) conf
+
 conf/machines: conf
 conf/repos.conf: conf
 
