@@ -17,10 +17,10 @@ then
 	exit 2
 fi
 HOST="build-feeds.victronenergy.com"
-FULL_PATH="/var/www/html/build-feeds/$server_path"
+FULL_PATH="/mnt/data/www/html/build-feeds/$server_path"
 echo "Uploading to: $HOST:$FULL_PATH"
 ssh builder@$HOST "mkdir -p $FULL_PATH/"
-rsync -v -rlt --delete ./deploy builder@$HOST:$FULL_PATH
+time rsync -v -rlt --delete ./deploy builder@$HOST:$FULL_PATH
 echo ""
 echo "See https://$HOST/$server_path/ for the results."
 
