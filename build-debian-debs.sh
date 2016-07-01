@@ -5,8 +5,5 @@
 make CONFIG=raspbian reconf fetch-all build/conf/bblayers.conf
 . ./sources/openembedded-core/oe-init-build-env build sources/bitbake
 export DISTRO=debian-jessie
-export MACHINE=debian-armel
-bitbake vrmlogger
 
-export MACHINE=debian-armhf
 bitbake vrmlogger && bitbake package-index
