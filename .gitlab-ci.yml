@@ -106,9 +106,23 @@ build-debian-jessie:
   dependencies: []
   when: always
 
-build-sdk:
+build-sdk-danny:
   script:
     - make CONFIG=danny fetch sdk
+    - ./sync-deploy-to-build-feeds.sh
+  stage: build-sdk
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/venus/sdk
+  dependencies: []
+  when: always
+
+build-sdk-jethro:
+  script:
+    - export MACHINE=beaglebone && make CONFIG=jethro fetch sdk
     - ./sync-deploy-to-build-feeds.sh
   stage: build-sdk
   tags:
