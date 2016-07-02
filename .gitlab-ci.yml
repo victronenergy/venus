@@ -19,7 +19,7 @@ stages:
   - build-danny-ccgx-opensource
   - build-sdk
 
-build-danny-ccgx-full:
+.build-danny-ccgx-full:
   script:
     - make CONFIG=danny reconf fetch-all ccgx install
   stage: build-danny-ccgx-full
@@ -32,7 +32,7 @@ build-danny-ccgx-full:
     - install/*.zip
   dependencies: []
 
-build-venus-ccgx-swu:
+.build-venus-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
     - ./ci-build-venus-ccgx-swu.sh
@@ -58,7 +58,7 @@ build-jethro-full:
     - deploy/venus/images
   dependencies: []
 
-build-danny-ccgx-opensource:
+.build-danny-ccgx-opensource:
   # This stage could be build immediately after the full version, saves time.
   # But that changes things too, the private metas will still be applied.
   # Therefore we do a clean build, making sure that John Doe on the internet
