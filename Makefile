@@ -63,7 +63,8 @@ prereq:
 	@sudo apt-get install sed wget cvs subversion git-core \
 		coreutils unzip texi2html texinfo docbook-utils \
 		gawk python-pysqlite2 diffstat help2man make gcc build-essential g++ \
-		desktop-file-utils chrpath u-boot-tools imagemagick zip
+		desktop-file-utils chrpath u-boot-tools imagemagick zip \
+		python-gobject python-gtk2
 
 sdk: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
