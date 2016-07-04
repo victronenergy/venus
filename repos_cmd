@@ -16,7 +16,7 @@ if [ "${1}" = "-q" ]; then
 fi
 
 do_echo "----------------- $@ -----------------------"
-repos=`find sources -mindepth 1 -maxdepth 1 -type d  ! -path '*.*'`
+repos=`find sources -mindepth 1 -maxdepth 1 -type d  ! -path '*.*' | sort`
 
 if [ -d "install" ]; then
 	repos="${repos} install"
