@@ -7,3 +7,4 @@ pseudodone
 sstate-cache
 tmp-eglibc
 tmp-glibc
+prop.*
