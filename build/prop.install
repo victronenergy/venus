@@ -1,0 +1,6 @@
+export git_repo=install.git
+export push_url=git@git.victronenergy.com:ccgx/install.git
+export upstream_url=
+export checkout_branch=master
+export upstream_full_branch=
+export upstream_branch=
