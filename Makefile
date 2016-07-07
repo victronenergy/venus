@@ -40,7 +40,7 @@ conf:
 
 reconf:
 	if [ -f build/conf/bblayers.conf ]; then rm build/conf/bblayers.conf; fi
-	ln -sf configs/$(CONFIG) conf
+	ln -sfn configs/$(CONFIG) conf
 
 conf/machines: conf
 conf/repos.conf: conf
