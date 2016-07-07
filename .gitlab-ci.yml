@@ -64,6 +64,7 @@ build-danny-ccgx-opensource:
 build-raspbian-wheezy:
   script:
     - ./build-raspbian-debs.sh wheezy
+    - ./sync-deploy-to-build-feeds.sh
   stage: build-packages
   tags:
     - venus
@@ -77,6 +78,7 @@ build-raspbian-wheezy:
 build-raspbian-jessie:
   script:
     - ./build-raspbian-debs.sh jessie
+    - ./sync-deploy-to-build-feeds.sh
   stage: build-packages
   tags:
     - venus
@@ -90,6 +92,7 @@ build-raspbian-jessie:
 build-debian-jessie:
   script:
     - ./build-debian-debs.sh
+    - ./sync-deploy-to-build-feeds.sh
   stage: build-packages
   tags:
     - venus
