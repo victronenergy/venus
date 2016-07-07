@@ -34,7 +34,7 @@ build-danny-ccgx-full:
 
 build-jethro-full:
   script:
-    - make CONFIG=jethro reconf fetch-all && make venus-image
+    - make CONFIG=jethro reconf fetch-all && make venus-images
   stage: build-jethro-full
   tags:
     - venus

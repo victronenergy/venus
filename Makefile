@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean fetch fetch-all fetch-install install update-repos.conf sdk venus-image $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb ccgx clean fetch fetch-all fetch-install install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
 
 CONFIG ?= danny
 
@@ -75,4 +75,7 @@ update-repos.conf:
 %-venus-image: build/conf/bblayers.conf
 	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
 
-venus-image: $(addsuffix -venus-image,$(MACHINES))
+venus-image: build/conf/bblayers.conf
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
+
+venus-images: $(addsuffix -venus-image,$(MACHINES))

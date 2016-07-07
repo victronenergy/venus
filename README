@@ -53,12 +53,14 @@ sudo dpkg-reconfigure dash
 
 # build all, this will take a while though... it builds for all MACHINES as found
 # in conf/machines.
-make venus-image
+make venus-images
 
 # to build for a specific machine, it can be prefixed, e.g. building the image only
 # for the beaglebone is done with, for example, one of these two:
 make ccgx-venus-image
 make beaglebone-venus-image
+
+alternatively the MACHINE can be set in env, and `make venus-image` can be used.
 
 # burn the obtained image to a sd card
 gunzip -c deploy/images/venus-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
