@@ -14,6 +14,6 @@ for buildoutput in deploy/*; do
 		fi
 		# -delete-excluded --delete
 		echo "$local -> $remote"
-		rsync -v -rp -e ssh $local victron_www@updates.victronenergy.com:/var/www/victron_www/feeds/$remote
+		rsync --delete -v -rp -e ssh $local/ victron_www@updates.victronenergy.com:/var/www/victron_www/feeds/$remote
 	done
 done
