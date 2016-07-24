@@ -21,7 +21,6 @@ stages:
 build-danny-ccgx-full:
   script:
     - make CONFIG=danny reconf fetch-all ccgx install
-    - rm deploy/venus/images/*.ubifs
   stage: build-danny-ccgx-full
   tags:
     - venus
