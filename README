@@ -63,7 +63,7 @@ make beaglebone-venus-image
 alternatively the MACHINE can be set in env, and `make venus-image` can be used.
 
 # burn the obtained image to a sd card
-gunzip -c deploy/images/venus-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
+gunzip -c deploy/venus/images/ccgx/venus-image-ccgx.live.img.gz | sudo dd of=/dev/mmcblk0 bs=1M && sync
 
 === Complete build for the ccgx ===
 
