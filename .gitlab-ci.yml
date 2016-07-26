@@ -13,6 +13,7 @@
 
 stages:
   - build-danny-ccgx-full
+  - build-venus-ccgx-swu
   - build-jethro-full
   - build-packages
   - build-danny-ccgx-opensource
@@ -29,6 +30,19 @@ build-danny-ccgx-full:
     paths:
     - deploy/venus/images
     - install/*.zip
+  dependencies: []
+
+build-venus-ccgx-swu:
+  script:
+    - make CONFIG=danny reconf fetch-all
+    - ./ci-build-venus-ccgx-swu.sh
+  stage: build-venus-ccgx-swu
+  tags:
+    - venus
+    - linux
+  artifacts:
+    paths:
+    - deploy/venus/images/ccgx/venus-upgrade-image-ccgx.zip
   dependencies: []
 
 build-jethro-full:
