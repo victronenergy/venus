@@ -19,7 +19,7 @@ ifdef DL_DIR
 	@echo 'DL_DIR = "${DL_DIR}"' >> build/conf/bblayers.conf
 endif
 
-%-bb:
+%-bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
 
 bb: build/conf/bblayers.conf
