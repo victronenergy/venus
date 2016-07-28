@@ -18,4 +18,8 @@ fi
 
 rfile="venus-swu-$machine-$swu_build.swu"
 scp $swu $remote:$rfile
-ssh $remote ln -s $rfile "venus-swu-$machine.swu"
+
+symlink="venus-swu-$machine.swu"
+ln -s $rfile $symlink
+rsync -l $symlink victron_www@updates.victronenergy.com:
+rm $symlink
