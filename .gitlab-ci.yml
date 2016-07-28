@@ -64,7 +64,7 @@ build-danny-ccgx-opensource:
   # can build the image from scratch, and that the result is the same.
   script:
     - make CONFIG=danny fetch ccgx-venus-image
-    - rm deploy/venus/images/*.ubifs
+    - rm deploy/venus/images/ccgx/*.ubifs
   stage: build-danny-ccgx-opensource
   tags:
     - venus
