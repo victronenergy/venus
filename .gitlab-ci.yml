@@ -36,6 +36,7 @@ build-venus-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
     - ./ci-build-venus-ccgx-swu.sh
+    - ./ci-upload-swu.sh
   stage: build-venus-ccgx-swu
   tags:
     - venus
