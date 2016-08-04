@@ -2,9 +2,6 @@
 # - working on something, and need that to be built first? Temporarily, insert
 #   a stage before the others.
 # - to make gitlab skip jobs, prepend its name with . (a dot).
-# - don't forget the dependencies: [] setting. It fixes artifacts being passed
-#   on from one stage to the next. See note for more info:
-#   https://gitlab.com/gitlab-org/gitlab-ce/issues/3423#note_4714661
 # - gitlab: don't forget to set the builds option to clone instead of git fetch
 #   see Project Settings -> Builds. Fixes issues new builds not being 100%
 #   clean builds.
@@ -12,53 +9,53 @@
 #   minutes, to, for example, 180 minutes. 
 
 stages:
-  - build-danny-ccgx-full
-  - build-venus-ccgx-swu
-  - build-jethro-full
-  - build-packages
-  - build-danny-ccgx-opensource
-  - build-sdk
+  - build
+  - deploy
 
-build-danny-ccgx-full:
+build-danny-bpp3:
   script:
-    - make CONFIG=danny reconf fetch-all ccgx install
-  stage: build-danny-ccgx-full
+    - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
+    - ./build-bpp3.sh
+    - ./ci-populate-artifacts.sh danny-bpp3
+  stage: build
   tags:
     - venus
     - linux
   artifacts:
+    expire_in: 1 week
     paths:
-    - deploy/venus/images
-    - install/*.zip
-  dependencies: []
+    - artifacts-danny-bpp3.tgz
 
 build-venus-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
-    - ./ci-build-venus-ccgx-swu.sh
-    - ./ci-upload-swu.sh
-  stage: build-venus-ccgx-swu
+    - ./build-venus-ccgx-swu.sh
+    - ./ci-populate-artifacts.sh danny-ccgx
+  stage: build
   tags:
     - venus
     - linux
   artifacts:
+    expire_in: 1 week
     paths:
-    - deploy/venus/images/ccgx/venus-upgrade-image-ccgx.zip
-  dependencies: []
+    - artifacts-danny-ccgx.tgz
 
-build-jethro-full:
+build-jethro:
   script:
-    - make CONFIG=jethro reconf fetch-all && make venus-images
-  stage: build-jethro-full
+    - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
+    - ./build-jethro-cortexa8hf.sh
+    - make venus-images
+    - ./ci-populate-artifacts.sh jethro
+  stage: build
   tags:
     - venus
     - linux
   artifacts:
+    expire_in: 1 week
     paths:
-    - deploy/venus/images
-  dependencies: []
+    - artifacts-jethro.tgz
 
-build-danny-ccgx-opensource:
+.build-danny-ccgx-opensource:
   # This stage could be build immediately after the full version, saves time.
   # But that changes things too, the private metas will still be applied.
   # Therefore we do a clean build, making sure that John Doe on the internet
@@ -66,79 +63,34 @@ build-danny-ccgx-opensource:
   script:
     - make CONFIG=danny fetch ccgx-venus-image
     - rm deploy/venus/images/ccgx/*.ubifs
-  stage: build-danny-ccgx-opensource
+  stage: build
   tags:
     - venus
     - linux
   artifacts:
+    expire_in: 1 week
     paths:
     - deploy/venus/images
-  dependencies: []
 
-build-raspbian-wheezy:
+build-debian-packages:
   script:
-    - ./build-raspbian-debs.sh wheezy
-    - ./sync-deploy-to-build-feeds.sh
-  stage: build-packages
+    - make CONFIG=raspbian reconf fetch-all build/conf/bblayers.conf
+    - ./build-all-debian-packages.sh
+    - ./ci-populate-artifacts.sh deb
+  stage: build
   tags:
     - venus
     - linux
   artifacts:
+    expire_in: 1 week
     paths:
-    - deploy/raspbian-wheezy/reprepro
-  dependencies: []
-  when: always
+    - artifacts-deb.tgz
 
-build-raspbian-jessie:
+deploy:
   script:
-    - ./build-raspbian-debs.sh jessie
-    - ./sync-deploy-to-build-feeds.sh
-  stage: build-packages
+    - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
+    - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
+  stage: deploy
   tags:
     - venus
     - linux
-  artifacts:
-    paths:
-    - deploy/raspbian-jessie/reprepro
-  dependencies: []
-  when: always
-
-build-debian-jessie:
-  script:
-    - ./build-debian-debs.sh
-    - ./sync-deploy-to-build-feeds.sh
-  stage: build-packages
-  tags:
-    - venus
-    - linux
-  artifacts:
-    paths:
-    - deploy/debian-jessie/reprepro
-  dependencies: []
-  when: always
-
-build-sdk-danny:
-  script:
-    - make CONFIG=danny fetch sdk
-  stage: build-sdk
-  tags:
-    - venus
-    - linux
-  artifacts:
-    paths:
-    - deploy/venus/sdk
-  dependencies: []
-  when: always
-
-build-sdk-jethro:
-  script:
-    - export MACHINE=beaglebone && make CONFIG=jethro fetch sdk
-  stage: build-sdk
-  tags:
-    - venus
-    - linux
-  artifacts:
-    paths:
-    - deploy/venus/sdk
-  dependencies: []
-  when: always
