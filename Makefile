@@ -1,5 +1,6 @@
 .PHONY: bb ccgx clean fetch fetch-all fetch-install install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
 
+SHELL = bash
 CONFIG ?= danny
 
 -include conf/machines

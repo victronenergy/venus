@@ -48,9 +48,6 @@ make fetch
 # install host packages (Debian based)
 make prereq
 
-# Replace dash with bash (Debian based)
-sudo dpkg-reconfigure dash
-
 # build all, this will take a while though... it builds for all MACHINES as found
 # in conf/machines.
 make venus-images
