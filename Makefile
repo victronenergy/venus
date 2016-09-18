@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean fetch fetch-all fetch-install install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb ccgx clean clean-keep-sstate fetch fetch-all fetch-install install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
 
 SHELL = bash
 CONFIG ?= danny
@@ -26,12 +26,14 @@ endif
 bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake && bash --init-file sources/openembedded-core/oe-init-build-env
 
-clean:
+clean-keep-cache:
 	@rm -rf build/tmp-eglibc
 	@rm -rf build/tmp-glibc
-	@rm -rf build/sstate-cache
 	@rm -rf deploy
 	@rm -f build/conf/bblayers.conf
+
+clean: clean-keep-sstate
+	@rm -rf build/sstate-cache
 
 ccgx: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake bpp3-rootfs
