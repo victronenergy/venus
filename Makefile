@@ -1,9 +1,52 @@
-.PHONY: bb ccgx clean clean-keep-sstate fetch fetch-all fetch-install install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb ccgx clean clean-keep-sstate fetch fetch-all fetch-install help install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
 
 SHELL = bash
 CONFIG ?= danny
 
 -include conf/machines
+
+help:
+	@echo "usage:"
+	@echo
+	@echo "Setup"
+	@echo "  make prereq"
+	@echo "   - Installs required host packages for Debian based distro's."
+	@echo
+	@echo "Checking out:"
+	@echo "  make CONFIG='jethro' fetch"
+	@echo "   - Downloads public available repositories needed to build for jethro."
+	@echo "  make CONFIG='jethro' fetch-all"
+	@echo "   - Downloads all repositories needed to build for jethro, needs victron git access."
+	@echo
+	@echo "  note: It is assumed you only checkout once, iow switching between CONFIGs is not"
+	@echo "        supported on purpose, since it would require resetting git branches forcefully"
+	@echo "        and that might throw away any pending, not yet pushed work."
+	@echo "        After a 'rm -rf sources && make clean' fetching should work again"
+	@echo
+	@echo "Building:"
+	@echo "  make beaglebone-venus-image"
+	@echo "   - Build an image for the beaglebone. beaglebone can be substituted by another supported machine."
+	@echo "  make venus-images"
+	@echo "   - Build images for all MACHINES supported for this CONFIG."
+	@echo ""
+	@echo "Problem resolving:"
+	@echo "  make beaglebone-bb"
+	@echo "    - Drops you to a shell with oe script being sourced and MACHINE set."
+	@echo "  make clean-keep-sstate"
+	@echo "    - Throw away the tmp / deploy dir but keep sstate (the cached build output) to quickly"
+	@echo "      repopulate them. If you run out of disk space / want to cleanup deploy this can help you.."
+	@echo "  make clean"
+	@echo "    - Throw away the tmp / deploy dir, including sstate."
+	@echo
+	@echo "Checking in:"
+	@echo "  make update-repos.conf"
+	@echo "    - Updates repos.conf to the checked out git branches. It still needs to be committed to git though."
+	@echo
+	@echo "Internals / needed when modifying whitelist etc:"
+	@echo "  make build/conf/bblayers.conf"
+	@echo "    - Creates the bblayers.conf by looking at the repositories being checkout in sources"
+	@echo "      and being in metas.whitelist, if it doesn't exist. Just remove the mentioned file if"
+	@echo "      you want to update it forcefully, it will be regenerated."
 
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
