@@ -69,7 +69,7 @@ endif
 bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake && bash --init-file sources/openembedded-core/oe-init-build-env
 
-clean-keep-cache:
+clean-keep-sstate:
 	@rm -rf build/tmp-eglibc
 	@rm -rf build/tmp-glibc
 	@rm -rf deploy
