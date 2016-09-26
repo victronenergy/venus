@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
 . ./sources/openembedded-core/oe-init-build-env build sources/bitbake
