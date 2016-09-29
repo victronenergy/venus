@@ -95,3 +95,12 @@ deploy:
   tags:
     - venus
     - linux
+
+deploy_www:
+  only:
+    - master
+  script: ./ci-upload-artifacts-to-www.sh
+  stage: deploy
+  tags:
+    - venus
+    - linux
