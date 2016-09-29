@@ -45,6 +45,7 @@ build-jethro:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
     - ./build-jethro-cortexa8hf.sh
     - make venus-images
+    - ./build-venus-jethro-swu.sh
     - ./ci-populate-artifacts.sh jethro
   stage: build
   tags:
