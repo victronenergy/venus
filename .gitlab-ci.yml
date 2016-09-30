@@ -26,10 +26,10 @@ build-danny-bpp3:
     paths:
     - artifacts-danny-bpp3.tgz
 
-build-venus-ccgx-swu:
+build-danny-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
-    - ./build-venus-ccgx-swu.sh
+    - ./build-danny-ccgx-swu.sh
     - ./ci-populate-artifacts.sh danny-ccgx
   stage: build
   tags:
