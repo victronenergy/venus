@@ -99,7 +99,9 @@ deploy:
 deploy_www:
   only:
     - master
-  script: ./ci-upload-artifacts-to-www.sh
+  script:
+    - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
+    - ./ci-upload-artifacts-to-www.sh
   stage: deploy
   tags:
     - venus

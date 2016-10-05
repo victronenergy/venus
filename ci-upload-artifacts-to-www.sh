@@ -3,7 +3,10 @@
 echo "Synchronizing develop feed"
 
 HOST="updates.victronenergy.com"
-FULL_PATH="/var/www/victron_www/feeds/venus/swu/develop"
+FULL_PATH="feeds_venus_develop"
+# feeds_venus_develop is a bind mount, with a max size to prevent automatically
+# filling up that server in case something goes wrong.
+
 echo "Uploading to: $HOST:$FULL_PATH"
-# --delete
-time rsync -v -arlt ./artifacts/ victron_www_swu@$HOST:develop
+echo "Will be available at: https://$HOST/feeds/venus/develop"
+time rsync -v -arlt --delete ./artifacts/ victron_www_swu@$HOST:$FULL_PATH
