@@ -67,7 +67,6 @@ function sdk
 
 debs
 ipkgs
-image bpp3-rootfs-swu swu
 image venus-install-sdcard img.zip
 image venus-swu swu
 image venus-upgrade-image zip
