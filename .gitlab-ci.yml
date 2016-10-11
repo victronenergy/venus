@@ -12,7 +12,7 @@ stages:
   - build
   - deploy
 
-build-danny-bpp3:
+.build-danny-bpp3:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
     - ./build-bpp3.sh
