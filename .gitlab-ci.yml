@@ -29,7 +29,7 @@ stages:
 build-danny-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
-    - ./build-danny-ccgx-swu.sh
+    - ./build-danny-ccgx-swu.sh all
     - ./ci-populate-artifacts.sh danny
   stage: build
   tags:
