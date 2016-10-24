@@ -30,7 +30,7 @@ build-danny-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
     - ./build-danny-ccgx-swu.sh
-    - ./ci-populate-artifacts.sh danny-ccgx
+    - ./ci-populate-artifacts.sh danny
   stage: build
   tags:
     - venus
