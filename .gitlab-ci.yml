@@ -38,7 +38,7 @@ build-danny-ccgx-swu:
   artifacts:
     expire_in: 1 week
     paths:
-    - artifacts-danny-ccgx.tgz
+    - artifacts-danny.tgz
 
 build-jethro:
   script:
