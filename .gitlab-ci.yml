@@ -93,8 +93,8 @@ deploy:
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
   stage: deploy
   tags:
-    - venus
-    - linux
+    - almere
+    - osx
 
 deploy_www:
   only:
@@ -104,5 +104,5 @@ deploy_www:
     - ./ci-upload-artifacts-to-www.sh
   stage: deploy
   tags:
-    - venus
-    - linux
+    - almere
+    - osx
