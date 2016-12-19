@@ -1,4 +1,4 @@
-.PHONY: bb ccgx clean clean-keep-sstate fetch fetch-all fetch-install help install update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
 
 SHELL = bash
 CONFIG ?= danny
@@ -78,9 +78,6 @@ clean-keep-sstate:
 clean: clean-keep-sstate
 	@rm -rf build/sstate-cache
 
-ccgx: build/conf/bblayers.conf
-	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake bpp3-rootfs
-
 conf:
 	ln -s configs/$(CONFIG) conf
 
@@ -101,9 +98,6 @@ fetch-all: conf/repos.conf
 
 fetch-install:
 	git clone git@git.victronenergy.com:ccgx/install.git
-
-install:
-	@cd sources/meta-ccgx/scripts/install && make prod && make recover
 
 prereq:
 	@sudo apt-get install sed wget cvs subversion git-core \

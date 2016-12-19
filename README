@@ -12,9 +12,9 @@ image / sdk which already available anyway, in binary form.
 Anyway, if you insist: this repo contains some wrapper functions
 around bitbake and git to fetch, and compile sources.
 
-For a complete build (make ccgx) you need to have access to private
-repros of Victron Energy. The live image (make venus-image) compiles
-fine without them.
+For a complete build you need to have access to private repros of Victron
+Energy. Building only opensource packages is also possible (but not checked
+automatically at the moment).
 
 Note: repos is just like git submodule foreach -q git, but shorter,
 so you can do:
@@ -66,13 +66,13 @@ gunzip -c deploy/venus/images/ccgx/venus-image-ccgx.live.img.gz | sudo dd of=/de
 
 # install ssh keys for github / gitlab etc
 make fetch-all
-make ccgx
+make venus-images
 
 === other configurations ===
 Above instructions checkout the version as used for the ccgx release as distributed.
 Alternative setups can also be used, e.g. to build for a newer OE version use e.g.:
 
-make CONFIG=fido fetch-all
+make CONFIG=jethro fetch-all
 
 The directory conf contains the supported configurations.
 
@@ -81,8 +81,8 @@ The directory conf contains the supported configurations.
 environment. In this shell bitbake can be called to do any custom action, e.g.
 bitbake -c cleansstate or bitbake [recipe] etc.
 
-Note: it will default to MACHINE=bpp3, when building for another one, don't forget
-to set MACHINE or prefix it, e.g. make ccgx-bb, wil set MACHINE to ccgx.
+Note: it will default to MACHINE=ccgx, when building for another one, don't forget
+to set MACHINE or prefix it, e.g. make beaglebone-bb, wil set MACHINE to beaglebone.
 
 === managing git remotes and branches ====
 
