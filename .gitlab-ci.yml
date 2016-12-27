@@ -12,20 +12,6 @@ stages:
   - build
   - deploy
 
-.build-danny-bpp3:
-  script:
-    - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
-    - ./build-bpp3.sh
-    - ./ci-populate-artifacts.sh danny-bpp3
-  stage: build
-  tags:
-    - venus
-    - linux
-  artifacts:
-    expire_in: 1 week
-    paths:
-    - artifacts-danny-bpp3.tgz
-
 build-danny-ccgx-swu:
   script:
     - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
