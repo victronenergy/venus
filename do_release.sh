@@ -24,7 +24,7 @@ function release ()
 	ssh $REMOTE "rsync -v $exclude -rptl $from/ $to"
 
 	# keep all released images
-	if [ "$to" = "release" ]; then
+	if [ "$2" = "release" ]; then
 		exclude="$exclude --exclude=images/"
 	fi
 
