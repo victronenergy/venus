@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export DISTRO=$1
 rm -rf sources/meta-bin-deb-generated/meta-generated/$DISTRO
