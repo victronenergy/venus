@@ -62,6 +62,9 @@ build/conf/bblayers.conf:
 ifdef DL_DIR
 	@echo 'DL_DIR = "${DL_DIR}"' >> build/conf/bblayers.conf
 endif
+ifdef PERSISTENT_DIR_PREFIX
+	@echo 'PERSISTENT_DIR_PREFIX = "${PERSISTENT_DIR_PREFIX}"' >> build/conf/bblayers.conf
+endif
 
 %-bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
