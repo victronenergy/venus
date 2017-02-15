@@ -4,6 +4,7 @@ sources/meta-openembedded/meta-networking
 sources/meta-openembedded/meta-oe
 sources/meta-openembedded/meta-python
 sources/meta-openembedded/meta-webserver
+sources/meta-qt5
 sources/meta-swupdate
 sources/meta-victronenergy/meta-alternatives
 sources/meta-victronenergy/meta-backports
