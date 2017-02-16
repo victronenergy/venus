@@ -1,3 +1,5 @@
+sources/meta-bin-deb
+sources/meta-bin-deb-generated
 sources/meta-openembedded/meta-multimedia
 sources/meta-openembedded/meta-networking
 sources/meta-openembedded/meta-oe
