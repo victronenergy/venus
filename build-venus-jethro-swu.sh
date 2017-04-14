@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . ./sources/openembedded-core/oe-init-build-env build sources/bitbake
-export MACHINE=ccgxhf
+export MACHINE=ccgx
 bitbake venus-upgrade-image venus-install-sdcard
 
 export MACHINE=beaglebone

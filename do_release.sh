@@ -12,7 +12,7 @@ function release ()
 {
 	from="$D$1"
 	to="$D$2"
-	exclude="--exclude=images/ccgxhf/"
+	exclude=""
 
 	echo $from $to
 	ssh $REMOTE "if [ ! -d $to ]; then mkdir $to; fi"

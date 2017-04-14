@@ -12,20 +12,6 @@ stages:
   - build
   - deploy
 
-build-danny-ccgx-swu:
-  script:
-    - make CONFIG=danny reconf fetch-all build/conf/bblayers.conf
-    - ./build-danny-ccgx-swu.sh all
-    - ./ci-populate-artifacts.sh danny
-  stage: build
-  tags:
-    - venus
-    - linux
-  artifacts:
-    expire_in: 1 week
-    paths:
-    - artifacts-danny.tgz
-
 build-jethro:
   script:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
@@ -41,23 +27,6 @@ build-jethro:
     expire_in: 1 week
     paths:
     - artifacts-jethro.tgz
-
-.build-danny-ccgx-opensource:
-  # This stage could be build immediately after the full version, saves time.
-  # But that changes things too, the private metas will still be applied.
-  # Therefore we do a clean build, making sure that John Doe on the internet
-  # can build the image from scratch, and that the result is the same.
-  script:
-    - make CONFIG=danny fetch ccgx-venus-image
-    - rm deploy/venus/images/ccgx/*.ubifs
-  stage: build
-  tags:
-    - venus
-    - linux
-  artifacts:
-    expire_in: 1 week
-    paths:
-    - deploy/venus/images
 
 build-debian-packages:
   script:
