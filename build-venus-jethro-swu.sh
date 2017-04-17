@@ -6,3 +6,6 @@ bitbake venus-upgrade-image venus-install-sdcard
 
 export MACHINE=beaglebone
 bitbake venus-install-sdcard
+
+export MACHINE=raspberrypi2
+bitbake venus-swu venus-image

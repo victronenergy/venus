@@ -15,6 +15,7 @@ stages:
 build-jethro:
   script:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
+    - ./build-jethro-cortexa7hf.sh
     - ./build-jethro-cortexa8hf.sh
     - make venus-images
     - ./build-venus-jethro-swu.sh
