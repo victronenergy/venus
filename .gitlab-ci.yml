@@ -28,6 +28,8 @@ build-jethro:
     expire_in: 1 week
     paths:
     - artifacts-jethro.tgz
+  except:
+    - tags
 
 build-debian-packages:
   script:
@@ -42,6 +44,8 @@ build-debian-packages:
     expire_in: 1 week
     paths:
     - artifacts-deb.tgz
+  except:
+    - tags
 
 deploy:
   script:
@@ -51,6 +55,8 @@ deploy:
   tags:
     - almere
     - osx
+  except:
+    - tags
 
 deploy_www:
   only:
@@ -62,3 +68,5 @@ deploy_www:
   tags:
     - almere
     - osx
+  except:
+    - tags
