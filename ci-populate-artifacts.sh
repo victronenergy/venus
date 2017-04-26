@@ -69,7 +69,7 @@ debs
 ipkgs
 image venus-install-sdcard img.zip
 image venus-swu swu
-image venus-image rpi-sdimg
+image venus-image rpi-sdimg.zip
 image venus-upgrade-image zip
 sdk
 
