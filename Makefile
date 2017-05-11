@@ -1,7 +1,7 @@
 .PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
 
 SHELL = bash
-CONFIG ?= danny
+CONFIG ?= jethro
 
 -include conf/machines
 
