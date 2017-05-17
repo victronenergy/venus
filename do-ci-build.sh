@@ -3,12 +3,18 @@
 if [ "$1" = "" ]; then
 	echo usage $0 branch
 	echo
-	echo Creates a branch with configs adjust to the checkouted
-	echo branch, commits them and pushes the result to the build
-	echo "server (as in git remote ci)."
+	echo Creates a branch in the venus repo with the configs adjusted
+	echo to the checkouted branches in ./sources. It then adds a commit
+	echo with these changes and pushes the branchs (hard!) to the git-
+	echo remote under the name builder. Typically the VE gitlab server,
+	echo since that is running CI.
 	echo
-	echo WARNING: it will push the branches hard!!!!. Make sure you
-	echo do not use a branch you care about...
+	echo As an extra bonus it puts the commitlog of all the commits
+	echo which are not yet in their master in the commit-message.
+	echo
+	echo WARNING: it will push the created venus branch hard to the
+	echo builder!! Make sure you do not use the name of a branch you
+	echo care about...
 	exit 1
 fi
 
