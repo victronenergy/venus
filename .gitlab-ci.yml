@@ -60,7 +60,7 @@ deploy:
 
 deploy_www:
   only:
-    - master
+    - b2.08
   script:
     - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
     - ./ci-upload-artifacts-to-www.sh
