@@ -34,7 +34,7 @@ function release ()
 case $1 in
 	release )
 		echo "Publish release"
-		release candidate release
+		release develop release
 		;;
 	candidate )
 		echo "Publish candidate"
