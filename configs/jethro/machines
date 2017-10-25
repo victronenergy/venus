@@ -1,1 +1,1 @@
-MACHINES=beaglebone ccgx achilles
+MACHINES=raspberrypi2 beaglebone ccgx canvu500
