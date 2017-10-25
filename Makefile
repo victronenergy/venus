@@ -120,6 +120,12 @@ swu: build/conf/bblayers.conf
 
 swus: $(addsuffix -swu,$(MACHINES))
 
+# complete machine specific build / no sdk
+%-machine: build/conf/bblayers.conf
+	export MACHINE=$(subst -machine,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake packagegroup-venus
+
+machines: $(addsuffix -machine,$(MACHINES))
+
 update-repos.conf:
 	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf" && sed -i -e '/^install /d' $$conf
 
