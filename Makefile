@@ -112,6 +112,14 @@ prereq:
 sdk: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
 
+%-swu: build/conf/bblayers.conf
+	export MACHINE=$(subst -swu,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
+
+swu: build/conf/bblayers.conf
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
+
+swus: $(addsuffix -swu,$(MACHINES))
+
 update-repos.conf:
 	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf" && sed -i -e '/^install /d' $$conf
 
