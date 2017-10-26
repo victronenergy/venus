@@ -134,6 +134,9 @@ machines: $(addsuffix -machine,$(MACHINES))
 update-repos.conf:
 	@conf=$$PWD/conf/repos.conf; echo -n > $$conf && ./repos_cmd "git-show-remote.sh \$$repo >> $$conf" && sed -i -e '/^install /d' $$conf
 
+# complete venus, build all machines and all SDKs
+venus: machines sdks
+
 %-venus-image: build/conf/bblayers.conf
 	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
 
