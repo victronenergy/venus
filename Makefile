@@ -109,8 +109,13 @@ prereq:
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
 		python-gobject python-gtk2
 
-sdk: build/conf/bblayers.conf
-	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
+cortexa7hf-sdk: build/conf/bblayers.conf
+	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
+
+cortexa8hf-sdk: build/conf/bblayers.conf
+	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
+
+sdks: cortexa7hf-sdk cortexa8hf-sdk
 
 %-swu: build/conf/bblayers.conf
 	export MACHINE=$(subst -swu,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
