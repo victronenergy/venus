@@ -15,10 +15,25 @@ stages:
 build-jethro:
   script:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
-    - ./build-jethro-cortexa7hf.sh
-    - ./build-jethro-cortexa8hf.sh
-    - make venus-images
-    - ./build-venus-jethro-swu.sh
+    - make venus
+    - ./ci-populate-artifacts.sh jethro
+  stage: build
+  tags:
+    - venus
+    - linux
+  artifacts:
+    expire_in: 1 week
+    paths:
+    - artifacts-jethro.tgz
+  only:
+    - master
+  except:
+    - tags
+
+build-jethro:
+  script:
+    - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
+    - make swus
     - ./ci-populate-artifacts.sh jethro
   stage: build
   tags:
@@ -30,6 +45,7 @@ build-jethro:
     - artifacts-jethro.tgz
   except:
     - tags
+    - master
 
 build-debian-packages:
   script:
@@ -44,6 +60,8 @@ build-debian-packages:
     expire_in: 1 week
     paths:
     - artifacts-deb.tgz
+  only:
+    - master
   except:
     - tags
 
