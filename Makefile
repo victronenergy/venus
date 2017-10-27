@@ -24,11 +24,33 @@ help:
 	@echo "        After a 'rm -rf sources && make clean' fetching should work again"
 	@echo
 	@echo "Building:"
-	@echo "  make beaglebone-venus-image"
-	@echo "   - Build an image for the beaglebone. beaglebone can be substituted by another supported machine."
-	@echo "  make venus-images"
-	@echo "   - Build images for all MACHINES supported for this CONFIG."
-	@echo ""
+	@echo "  Venus uses swupdate (https://github.com/sbabic/swupdate) for reliable firmware updates"
+	@echo "    make beaglebone-swu"
+	@echo "      - Builds a swu file for the beaglebone, which can be installed by sd / usb / or remotely"
+	@echo "    make swus"
+	@echo "      - Builds swu files for all MACHINES"
+	@echo
+	@echo "  Building (bootable) images is also supported, but it depends on the machine"
+	@echo "    make beaglebone-venus-image"
+	@echo "      - Build an image for the beaglebone. beaglebone can be substituted by another supported MACHINE."
+	@echo "    make venus-images"
+	@echo "      - Build images for all MACHINES supported for this CONFIG."
+	@echo
+	@echo "  Optional packages"
+	@echo "    make beaglebone-machine"
+	@echo "      - Builds everything for a given machine. This includes the image / optional packages"
+	@echo "        etc. Hence this make take some time (building java, nodejs etc). I doesn't build a sdk"
+	@echo "    make machines"
+	@echo "      - like above, but for all MACHINES"
+	@echo
+	@echo "  Software development kits"
+	@echo "    make sdks"
+	@echo "       Builds a SDK per architecture. This takes time!"
+	@echo
+	@echo "  Venus"
+	@echo "    make venus"
+	@echo "      - builds everything supported, all MACHINES and optional things."
+	@echo
 	@echo "Problem resolving:"
 	@echo "  make beaglebone-bb"
 	@echo "    - Drops you to a shell with oe script being sourced and MACHINE set."
