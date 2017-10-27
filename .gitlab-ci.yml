@@ -12,7 +12,7 @@ stages:
   - build
   - deploy
 
-build-jethro:
+build-jethro-full:
   script:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
     - make venus
