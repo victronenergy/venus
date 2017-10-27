@@ -32,6 +32,7 @@ function ipkgs
 		# remove unused packages
 		find $dst -name "*-dbg_*.ipk" -exec rm {} \;
 		find $dst -type d -name i686-nativesdk -prune -exec rm -rf {} \;
+		find $dst -type d -name x86_64-nativesdk -prune -exec rm -rf {} \;
 	fi
 }
 
