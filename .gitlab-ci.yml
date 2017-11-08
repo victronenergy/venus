@@ -15,7 +15,9 @@ stages:
 build-jethro-full:
   script:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
-    - make venus
+    - rm -rf /media/data/venus/sstate-cache-tmp
+    - export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
+    - mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache
     - ./ci-populate-artifacts.sh jethro
   stage: build
   tags:
@@ -33,16 +35,13 @@ build-jethro-full:
 build-jethro:
   script:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
-    - make swus
+    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make swus
     - ./ci-populate-artifacts.sh jethro
+    - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
   stage: build
   tags:
     - venus
     - linux
-  artifacts:
-    expire_in: 1 week
-    paths:
-    - artifacts-jethro.tgz
   except:
     - tags
     - master
@@ -66,21 +65,11 @@ build-debian-packages:
     - tags
 
 deploy:
-  script:
-    - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
-    - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
-  stage: deploy
-  tags:
-    - almere
-    - osx
-  except:
-    - tags
-
-deploy_www:
   only:
     - master
   script:
     - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
+    - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
   stage: deploy
   tags:

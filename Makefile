@@ -72,7 +72,8 @@ help:
 
 build/conf/bblayers.conf:
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
-	@echo 'BBPATH = "$${TOPDIR}"' >> build/conf/bblayers.conf
+	@echo 'BBPATH_EXTRA ??= ""' >> build/conf/bblayers.conf
+	@echo 'BBPATH = "$${BBPATH_EXTRA}$${TOPDIR}"' >> build/conf/bblayers.conf
 	@echo 'BBFILES ?= ""' >> build/conf/bblayers.conf
 	@echo >> build/conf/bblayers.conf
 	@echo 'BBLAYERS = " \' >> build/conf/bblayers.conf
@@ -81,12 +82,6 @@ build/conf/bblayers.conf:
 	@comm -1 -2 metas.found metas.whitelist.sorted.tmp | sed -e 's,$$, \\,g' -e "s,^,$$PWD/,g" >> build/conf/bblayers.conf
 	@rm metas.whitelist.sorted.tmp
 	@echo '"' >> build/conf/bblayers.conf
-ifdef DL_DIR
-	@echo 'DL_DIR = "${DL_DIR}"' >> build/conf/bblayers.conf
-endif
-ifdef PERSISTENT_DIR_PREFIX
-	@echo 'PERSISTENT_DIR_PREFIX = "${PERSISTENT_DIR_PREFIX}"' >> build/conf/bblayers.conf
-endif
 
 %-bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
