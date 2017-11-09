@@ -49,10 +49,9 @@ if [ "$5" != "-" ]; then
 	git --git-dir=$1/.git --work-tree=$1 checkout "$5"
 fi
 
-# optionally set the upstream branch
-if [ "$6" != "-" ]; then
-	if [ "$4" != "-" ]; then
-		git --git-dir=$1/.git --work-tree=$1 fetch $(echo $6 | tr // " ")
-	fi
-	git --git-dir=$1/.git --work-tree=$1 branch -u "$6"
-fi
+# Set the checkout branch as default upstream branch
+#
+# Switching to OE point venus is based on can be done with:
+# ./repos branch -u 'origin/$upstream_branch'
+#
+git --git-dir=$1/.git --work-tree=$1 branch -u "origin/$5"
