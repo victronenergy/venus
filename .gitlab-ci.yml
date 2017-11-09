@@ -73,7 +73,7 @@ deploy:
     - ./ci-upload-artifacts-to-www.sh
   stage: deploy
   tags:
-    - almere
-    - osx
+    - venus
+    - linux
   except:
     - tags
