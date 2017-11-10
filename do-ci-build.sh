@@ -40,3 +40,4 @@ echo >> commit.txt
 git commit -a -F commit.txt
 git checkout $orig -f
 git push builder $branch -f
+git branch -D $branch
