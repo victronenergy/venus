@@ -17,7 +17,7 @@ build-jethro-full:
     - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
     - rm -rf /media/data/venus/sstate-cache-tmp
     - export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
-    - mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache
+    - mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old && mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache && rm -rf /media/data/venus/sstate-cache-old
     - ./ci-populate-artifacts.sh jethro
   stage: build
   tags:
