@@ -104,8 +104,7 @@ revision with:
 
 ### managing git remotes and branches
 
-The repos command iterates over all repository in sources. 
-
+```
 # patches not in upstream yet
 ./repos cherry -v
 
@@ -117,7 +116,7 @@ The repos command iterates over all repository in sources.
 or if you have git 2.5+ ./repos diff @{push}
 
 ./repos log @{u}..upstream/`git rev-parse --abbrev-ref @{u} | grep -o "[a-Z0-9]*$"` --oneline
-
+````
 
 ### Various notes
 
