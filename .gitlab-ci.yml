@@ -12,13 +12,13 @@ stages:
   - build
   - deploy
 
-build-jethro-full:
+build-rocko-full:
   script:
-    - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=rocko reconf fetch-all build/conf/bblayers.conf
     - rm -rf /media/data/venus/sstate-cache-tmp
     - export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
     - mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old && mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache && rm -rf /media/data/venus/sstate-cache-old
-    - ./ci-populate-artifacts.sh jethro
+    - ./ci-populate-artifacts.sh rocko
   stage: build
   tags:
     - venus
@@ -26,17 +26,17 @@ build-jethro-full:
   artifacts:
     expire_in: 1 week
     paths:
-    - artifacts-jethro.tgz
+    - artifacts-rocko.tgz
   only:
     - master
   except:
     - tags
 
-build-jethro:
+build-rocko:
   script:
-    - make CONFIG=jethro reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=rocko reconf fetch-all build/conf/bblayers.conf
     - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make swus
-    - ./ci-populate-artifacts.sh jethro
+    - ./ci-populate-artifacts.sh rocko
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
   stage: build
   tags:
