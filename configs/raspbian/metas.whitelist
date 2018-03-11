@@ -1,11 +1,11 @@
 sources/meta-bin-deb
 sources/meta-bin-deb-generated
+sources/meta-external-toolchain
 sources/meta-openembedded/meta-multimedia
 sources/meta-openembedded/meta-networking
 sources/meta-openembedded/meta-oe
 sources/meta-openembedded/meta-python
 sources/meta-openembedded/meta-webserver
-sources/meta-swupdate
 sources/meta-victronenergy/meta-alternatives
 sources/meta-victronenergy/meta-backports
 sources/meta-victronenergy/meta-third-party
