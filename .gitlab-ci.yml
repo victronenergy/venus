@@ -47,9 +47,13 @@ build-rocko:
     - master
 
 build-debian-packages:
+  # note: currently the sstate from the previous build is used, not the current one.
+  # This is often fine though, the native tools hardly change, so lets see if this works.
+  # The problem with making this is a seperate stage is that the artifacts (which are
+  # rather large) are going to be copied back and forth between the build stages as well)
   script:
     - make CONFIG=raspbian reconf fetch-all build/conf/bblayers.conf
-    - ./build-all-debian-packages.sh
+    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && ./build-all-debian-packages.sh
     - ./ci-populate-artifacts.sh deb
   stage: build
   tags:
