@@ -45,7 +45,7 @@ build-jethro:
     - tags
     - b2.13
 
-build-debian-packages:
+.build-debian-packages:
   script:
     - make CONFIG=raspbian reconf fetch-all build/conf/bblayers.conf
     - ./build-all-debian-packages.sh
