@@ -1,1 +1,1 @@
-MACHINES=raspberrypi2 beaglebone ccgx canvu500
+MACHINES=nanopi raspberrypi2 beaglebone ccgx canvu500
