@@ -75,6 +75,7 @@ deploy:
     - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
+    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
   stage: deploy
   tags:
     - venus
