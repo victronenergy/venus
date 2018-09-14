@@ -9,4 +9,4 @@ FULL_PATH="feeds_venus_develop"
 
 echo "Uploading to: $HOST:$FULL_PATH"
 echo "Will be available at: https://$HOST/feeds/venus/develop"
-time rsync -v -arlt --delete-before ./artifacts/ victron_www_swu@$HOST:$FULL_PATH
+time rsync -v -arlt --delete-before --exclude lost+found ./artifacts/ victron_www_swu@$HOST:$FULL_PATH
