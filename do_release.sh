@@ -33,15 +33,21 @@ function release ()
 
 case $1 in
 	release )
-		echo "Publish release"
+		echo "Candidate -> Release"
 		release candidate release
 		;;
 	candidate )
-		echo "Publish candidate"
+		echo "Testing -> Candidate"
 		release testing candidate
 		;;
 	testing )
+		echo "Develop -> Testing"
 		release develop testing
+		;;
+	skip-candidate )
+		echo "Testing -> Release (skips candidate!)"
+		read -n1 -r -p "Press any key to continue... Or CTRL-C to abort"
+		release testing release
 		;;
 	*)
 		echo "Not a valid parameter"
