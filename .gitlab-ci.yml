@@ -15,9 +15,7 @@ stages:
 build-rocko-full:
   script:
     - make CONFIG=rocko reconf fetch-all build/conf/bblayers.conf
-    - rm -rf /media/data/venus/sstate-cache-tmp
-    - export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
-    - mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old && mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache && rm -rf /media/data/venus/sstate-cache-old
+    - make venus
     - ./ci-populate-artifacts.sh rocko
   stage: build
   tags:
@@ -28,7 +26,7 @@ build-rocko-full:
     paths:
     - artifacts-rocko.tgz
   only:
-    - master
+    - b2.20
   except:
     - tags
 
@@ -44,7 +42,7 @@ build-rocko:
     - linux
   except:
     - tags
-    - master
+    - b2.20
 
 build-debian-packages:
   # note: currently the sstate from the previous build is used, not the current one.
@@ -64,18 +62,18 @@ build-debian-packages:
     paths:
     - artifacts-deb.tgz
   only:
-    - master
+    - b2.20
   except:
     - tags
 
 deploy:
   only:
-    - master
+    - b2.20
   script:
     - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
-    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
+    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=b2.20 https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
   stage: deploy
   tags:
     - venus
