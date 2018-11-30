@@ -118,6 +118,18 @@ or if you have git 2.5+ ./repos diff @{push}
 ./repos log @{u}..upstream/`git rev-parse --abbrev-ref @{u} | grep -o "[a-Z0-9]*$"` --oneline
 ````
 
+### Releasing
+
+```
+# tag & push venus repo as well as all repos.
+
+git tag v2.21
+git push origin v2.21
+
+./repos tag v2.21
+./repos push origin v2.21
+```
+
 ### Various notes
 
 #### 1. SDK Rebuild
