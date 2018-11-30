@@ -49,6 +49,11 @@ case $1 in
 		read -n1 -r -p "Press any key to continue... Or CTRL-C to abort"
 		release testing release
 		;;
+	skip-testing )
+		echo "Develop -> Candidate (skips testing!)"
+		read -n1 -r -p "Press any key to continue... Or CTRL-C to abort"
+		release develop candidate
+		;;
 	*)
 		echo "Not a valid parameter"
 		;;
