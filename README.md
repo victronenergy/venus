@@ -132,6 +132,14 @@ git push origin v2.21
 
 ### Various notes
 
-#### 1. SDK Rebuild
-Changing the distro version can cause some sdk packages fail to compile, this should fix that
-bitbake -c cleanall nativesdk-gettext nativesdk-gmp nativesdk-gdbm nativesdk-glib-2.0 nativesdk-qt4-tools
+#### 1. Linux update
+If you encounter problems like this:
+ * Solver encountered 1 problem(s):
+ * Problem 1/1:
+ *   - nothing provides kernel-image-4.14.67 needed by packagegroup-machine-base-1.0-r83.einstein
+
+if can be fixed with:
+  make einstein-bb
+  bitbake -c cleanall packagegroup-machine-base
+
+and thereafter try again
