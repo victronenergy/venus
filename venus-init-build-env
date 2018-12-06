@@ -1,0 +1,3 @@
+. sources/openembedded-core/oe-init-build-env
+PS1="$PS1\[\e[0;36m\]bb> \[\e[m\]"
+HISTCONTROL=ignoreboth

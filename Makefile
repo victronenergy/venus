@@ -84,10 +84,10 @@ build/conf/bblayers.conf:
 	@echo '"' >> build/conf/bblayers.conf
 
 %-bb: build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file sources/openembedded-core/oe-init-build-env
+	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file venus-init-build-env
 
 bb: build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake && bash --init-file sources/openembedded-core/oe-init-build-env
+	@export BITBAKEDIR=sources/bitbake && bash --init-file venus-init-build-env
 
 clean-keep-sstate:
 	@rm -rf build/tmp-eglibc
