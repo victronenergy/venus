@@ -46,7 +46,7 @@ build-rocko:
     - tags
     - master
 
-.build-debian-packages:
+build-debian-packages:
   # note: currently the sstate from the previous build is used, not the current one.
   # This is often fine though, the native tools hardly change, so lets see if this works.
   # The problem with making this is a seperate stage is that the artifacts (which are
