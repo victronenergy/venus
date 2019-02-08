@@ -55,3 +55,6 @@ fi
 # ./repos branch -u 'origin/$upstream_branch'
 #
 git --git-dir=$1/.git --work-tree=$1 branch -u "origin/$5"
+
+echo "Set git config log.follow=true, to handle all the recipe renames"
+git --git-dir=$1/.git --work-tree=$1 config log.follow true
