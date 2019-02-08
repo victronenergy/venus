@@ -130,6 +130,53 @@ git push origin v2.21
 ./repos push origin v2.21
 ```
 
+### Maintenance releases 
+
+As a rule, the base branch on which the maintenance releases will be based is
+prefixed with a `b`.
+
+This example shows how to create a new maintenance branch. The context is that
+master is already working on v2.30. Latest official release was v2.20. So we
+make a branch named b2.20 in which the first release will be v2.21; later if
+another maintenance release is necessary v2.22 is pushed on top; and so forth.
+
+```
+# clone, prep and push the venus repo
+git clone git@github.com:victronenergy/venus.git venus-b2.20
+git checkout v2.20
+git checkout -b b2.20
+git push --set-upstream origin b2.20
+
+# fetch all the meta repos
+make fetch-all
+
+# clone, prep and push them
+./repos checkout v2.20
+./repos checkout -b b2.20
+./repos push --set-upstream origin b2.20
+```
+
+Now you're all set; and ready to start cherry-picking.
+
+The eight golden rules of maintaining the maintenance branch
+
+1. only take changes from master: cherry-picking
+2. don't add changes or new versions that are not in master yet
+3. `git cherry-pick -x` appends a nice (cherry-picked from [ref]) line to the commit message
+4. add and/or increase the PR when adding patches
+5. drop the PR again when going to a clean version
+6. when adding patches; add a `backported from` note just like
+   [this one](https://github.com/victronenergy/meta-victronenergy-private/commit/22ac88f61cc6f13cce1d2fc5455248e066e7a835)
+   to the commit message
+7. go through the [todo](https://github.com/victronenergy/venus-private/wiki/todo)
+   where the team is working on master, and add `(**backported to v2.22**)` to
+   each and every patch and version thats been backported
+8. double verify everything by cross referencing the todo, the commits logs from
+   master as well as your own
+   
+And the master rule: changes need to be either really small, well tested or very important
+
+
 ### Various notes
 
 #### 1. Linux update
