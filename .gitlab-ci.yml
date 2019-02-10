@@ -73,7 +73,8 @@ deploy:
     - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
-    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=b2.20 https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
+    # trigger a pipeline on venus-tests repo; master branch; and pass our branch in the BRANCH variable
+    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master -F variables[BRANCH]=$CI_BUILD_REF_NAME https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
   stage: deploy
   tags:
     - venus
