@@ -116,6 +116,10 @@ revision with:
 or if you have git 2.5+ ./repos diff @{push}
 
 ./repos log @{u}..upstream/`git rev-parse --abbrev-ref @{u} | grep -o "[a-Z0-9]*$"` --oneline
+
+# rebase your local checkout branches on upstream master
+./repos fetch origin
+./repos rebase 'origin/$checkout_branch'
 ````
 
 ### Releasing
@@ -132,7 +136,8 @@ git push origin v2.21
 
 ### Maintenance releases
 
-As a rule, the base branch on which the maintenance releases will be based is
+#### How to create a new maintenance branch
+The base branch on which the maintenance releases will be based is to be
 prefixed with a `b`.
 
 This example shows how to create a new maintenance branch. The context is that
@@ -158,7 +163,15 @@ make fetch-all
 
 Now you're all set; and ready to start cherry-picking.
 
-The eight golden rules of maintaining the maintenance branch
+#### Full cherry-picks vs backporting patches
+Be aware that there are two ways to backport a change. One is to take
+a complete commit from the meta repositories; and the other one is to
+add patches from the source repository. Where you can, apply method
+one. But in case the repository, for example mk2-dbus or the gui, has
+had lots of commits out of which you need only one; then you have to
+take just the patch.
+
+#### The eight golden rules of maintaining maintenance branches
 
 1. only take changes from master: cherry-picking
 2. don't add changes or new versions that are not in master yet
@@ -169,12 +182,15 @@ The eight golden rules of maintaining the maintenance branch
    [this one](https://github.com/victronenergy/meta-victronenergy-private/commit/22ac88f61cc6f13cce1d2fc5455248e066e7a835)
    to the commit message
 7. go through the [todo](https://github.com/victronenergy/venus-private/wiki/todo)
-   where the team is working on master, and add `(**backported to v2.22**)` to
-   each and every patch and version thats been backported
+   where the team is working on master, and add `(**backported to v2.22**)` or where
+   applicable `(**backported to v2.22 as a patch**)` to each and every patch and version
+   thats been backported.
 8. double verify everything by cross referencing the todo, the commits logs from
-   master as well as your own
+   master as well as your own commit log.
 
-And the master rule: changes need to be either really small, well tested or very important
+#### The master rule when deciding against- or for inclusion
+
+Changes need to be either really small, well tested or very important
 
 
 ### Various notes
