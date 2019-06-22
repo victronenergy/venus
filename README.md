@@ -4,20 +4,26 @@ The problematic part with this name is that it is from the Roman
 mythology and not, as most of our products, from the Greek. Phoenix
 is already taken though by a charger...
 
-First of all, make sure you really want to rebuild a complete rootfs,
-it takes time to compile, lots of diskspace and results in an
-image / sdk which already available anyway, in binary form.
+This readme documents how to compile and build Venus OS from source.
 
-Anyway, if you insist: this repo is the starting point to build Venus.
+First, make sure that that is really what you want or need. It takes
+several hours to compile, lots of diskspace and results in an
+image and sdk which are both already available for download as binaries.
+
+Even when you are developing on one of the parts of Venus OS, for example
+one of its drivers, or the gui, its still not necessary to build the
+full Venus OS from source.
+
+Make sure to read the [Venus OS wiki](https://github.com/victronenergy/venus/wiki)
+first.
+
+So, if you insist: this repo is the starting point to build Venus.
 It contains wrapper functions around bitbake and git to fetch, and
 compile sources.
 
 For a complete build you need to have access to private repros of Victron
 Energy. Building only opensource packages is also possible (but not checked
 automatically at the moment).
-
-For further documentation on Venus, see the
-[Venus OS wiki](https://github.com/victronenergy/venus/wiki).
 
 Venus uses the OpenEmbedded, the [Yocto Project](https://www.yoctoproject.org/)
 build system architecture. For an introduction, start with reading their
