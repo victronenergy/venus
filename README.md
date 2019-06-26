@@ -156,6 +156,12 @@ another maintenance release is necessary v2.22 is pushed on top; and so forth.
 git clone git@github.com:victronenergy/venus.git venus-b2.20
 git checkout v2.20
 git checkout -b b2.20
+
+[
+  Now, modify .gitlab-ci.yml and the configs; see a previous maintenance branch
+  for how that is done.
+]
+
 git push --set-upstream origin b2.20
 
 # fetch all the meta repos
@@ -169,6 +175,7 @@ make fetch-all
 
 Now you're all set; and ready to start cherry-picking.
 
+
 #### Full cherry-picks vs backporting patches
 Be aware that there are two ways to backport a change. One is to take
 a complete commit from the meta repositories; and the other one is to
@@ -176,6 +183,12 @@ add patches from the source repository. Where you can, apply method
 one. But in case the repository, for example mk2-dbus or the gui, has
 had lots of commits out of which you need only one; then you have to
 take just the patch.
+
+
+#### The master rule when deciding against- or for inclusion
+
+Changes need to be either really small, well tested or very important
+
 
 #### The eight golden rules of maintaining maintenance branches
 
@@ -194,9 +207,11 @@ take just the patch.
 8. double verify everything by cross referencing the todo, the commits logs from
    master as well as your own commit log.
 
-#### The master rule when deciding against- or for inclusion
 
-Changes need to be either really small, well tested or very important
+#### Building a maintenance release
+
+To build, create a pipeline on the mirrors/venus repo, and run it for the
+maintenance branch. No variables needed.
 
 
 ### Various notes
