@@ -35,7 +35,7 @@ build-rocko-full:
 build-rocko:
   script:
     - make CONFIG=rocko reconf fetch-all build/conf/bblayers.conf
-    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make swus
+    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make machines
     - ./ci-populate-artifacts.sh rocko
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
   stage: build
