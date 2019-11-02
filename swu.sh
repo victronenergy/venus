@@ -10,8 +10,9 @@ update() {
 		sshargs="-p4000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet"
 	fi
 
+	swu=$(ssh $sshargs root@$host cat /etc/venus/swu-name)
 	machine=$(ssh $sshargs root@$host cat /etc/venus/machine)
-	cat $here/deploy/venus/images/$machine/venus-swu-$machine.swu | ssh $sshargs root@$host /opt/victronenergy/swupdate-scripts/check-updates.sh -swu file:///dev/stdin
+	cat $here/deploy/venus/images/$machine/$swu-$machine.swu | ssh $sshargs root@$host /opt/victronenergy/swupdate-scripts/check-updates.sh -swu file:///dev/stdin
 }
 
 if [ "$#" -eq 0 ]; then
