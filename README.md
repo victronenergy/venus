@@ -25,10 +25,7 @@ For a complete build you need to have access to private repros of Victron
 Energy. Building only opensource packages is also possible (but not checked
 automatically at the moment).
 
-Venus uses the OpenEmbedded, the [Yocto Project](https://www.yoctoproject.org/)
-build system architecture. For an introduction, start with reading their
-[wiki](https://wiki.yoctoproject.org/wiki/) and
-the [glossary](https://wiki.yoctoproject.org/wiki/Glossary).
+Venus uses [OpenEmbedded](https://www.openembedded.org/) as build system.
 
 ### Getting started
 Building Venus requires a Linux. At Victron we use Ubuntu for this.
