@@ -8,7 +8,9 @@ This readme documents how to compile and build Venus OS from source.
 
 First, make sure that that is really what you want or need. It takes
 several hours to compile, lots of diskspace and results in an
-image and sdk which are both already available for download as binaries.
+image and sdk which are both already available for download as binaries
+[swu](http://updates.victronenergy.com/feeds/venus/release/images/) and
+[sdk](http://updates.victronenergy.com/feeds/venus/release/sdk/).
 
 Even when you are developing on one of the parts of Venus OS, for example
 one of its drivers, or the gui, its still not necessary to build the
