@@ -149,17 +149,11 @@ make a branch named b2.20 in which the first release will be v2.21; later if
 another maintenance release is necessary v2.22 is pushed on top; and so forth.
 
 ```
-# clone, prep and push the venus repo
+# clone & make a branch in the venus repo
 git clone git@github.com:victronenergy/venus.git venus-b2.20
+cd venus-b2.20
 git checkout v2.20
 git checkout -b b2.20
-
-[
-  Now, modify .gitlab-ci.yml and the configs; see a previous maintenance branch
-  for how that is done.
-]
-
-git push --set-upstream origin b2.20
 
 # fetch all the meta repos
 make fetch-all
@@ -168,6 +162,25 @@ make fetch-all
 ./repos checkout v2.20
 ./repos checkout -b b2.20
 ./repos push --set-upstream origin b2.20
+
+# update the rocko config to the new branch
+make update-repos.conf
+git commit -a -m "Pin Rocko & (most of the) raspbian branches to b2.20"
+
+# Update gitlab-ci.yml
+[
+  Now, modify .gitlab-ci.yml. See a previous maintenance branch for
+  how that is done.
+]
+
+git commit -a -m "Don't touch SSTATE cache & build from b2.20"
+
+# Push the new branch and changes to the venus repo
+# Note that this causes a (useless) CI build to start on the builder once
+# it syncs. Easily cancelled in the gitlab ui.
+
+git push --set-upstream origin b2.20
+
 ```
 
 Now you're all set; and ready to start cherry-picking.
