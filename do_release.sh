@@ -1,5 +1,5 @@
 DEPLOY=deploy/venus
-REMOTE=victron_www@updates.victronenergy.com
+REMOTE=victron_www@updates-origin.victronenergy.com
 D=/var/www/victron_www/feeds/venus/
 FEED="$REMOTE:$OPKG"
 
