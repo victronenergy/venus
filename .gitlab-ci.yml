@@ -12,13 +12,13 @@ stages:
   - build
   - deploy
 
-build-zeus-full:
+build-dunfell-full:
   script:
-    - make CONFIG=zeus reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
     - rm -rf /media/data/venus/sstate-cache-tmp
     - export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
     - mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old && mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache && rm -rf /media/data/venus/sstate-cache-old
-    - ./ci-populate-artifacts.sh zeus
+    - ./ci-populate-artifacts.sh dunfell
   stage: build
   tags:
     - venus
@@ -26,17 +26,17 @@ build-zeus-full:
   artifacts:
     expire_in: 1 week
     paths:
-    - artifacts-zeus.tgz
+    - artifacts-dunfell.tgz
   only:
     - master
   except:
     - tags
 
-build-zeus:
+build-dunfell:
   script:
-    - make CONFIG=zeus reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
     - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make machines
-    - ./ci-populate-artifacts.sh zeus
+    - ./ci-populate-artifacts.sh dunfell
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch in the BRANCH variable
     - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master -F variables[BRANCH]=$CI_BUILD_REF_NAME https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
