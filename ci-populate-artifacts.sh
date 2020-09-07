@@ -55,6 +55,29 @@ function image
 	done
 }
 
+function suffix_symlinks
+{
+	ext="$1"
+	suffix="$2"
+
+	for symlink in $(find "$out" -type l -name "*.$ext"); do
+		tg=$(readlink $symlink)
+
+		# update where the symlink points to..
+		ln -sfT "$tg.$suffix" $symlink
+		# rename the symlink itself
+		mv $symlink $symlink.$suffix
+	done
+}
+
+function wic_images
+{
+	# gzip the wic files
+	image venus-image wic
+	suffix_symlinks "wic" "gz"
+	find "$out" -type f -name "*.wic" -exec pigz {} \;
+}
+
 function sdk
 {
 	if [ ! -d deploy/venus/sdk ]; then return; fi
@@ -70,7 +93,7 @@ debs
 ipkgs
 image venus-install-sdcard img.zip
 image venus-swu swu
-image venus-image rpi-sdimg.zip
+wic_images
 image venus-upgrade-image zip
 sdk
 
