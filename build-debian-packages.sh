@@ -3,7 +3,7 @@
 set -e
 
 case "$1" in
-raspbian-jessie|debian-jessie)
+raspbian-jessie|debian-jessie|debian-buster|raspbian-buster)
 	;;
 *)
 	echo usage: $0 distro
