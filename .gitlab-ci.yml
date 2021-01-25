@@ -12,13 +12,13 @@ stages:
   - build
   - deploy
 
-build-rocko-full:
+build-zeus-full:
   script:
-    - make CONFIG=rocko reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=zeus reconf fetch-all build/conf/bblayers.conf
     - rm -rf /media/data/venus/sstate-cache-tmp
     - export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
     - mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old && mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache && rm -rf /media/data/venus/sstate-cache-old
-    - ./ci-populate-artifacts.sh rocko
+    - ./ci-populate-artifacts.sh zeus
   stage: build
   tags:
     - venus
@@ -26,17 +26,17 @@ build-rocko-full:
   artifacts:
     expire_in: 1 week
     paths:
-    - artifacts-rocko.tgz
+    - artifacts-zeus.tgz
   only:
     - master
   except:
     - tags
 
-build-rocko:
+build-zeus:
   script:
-    - make CONFIG=rocko reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=zeus reconf fetch-all build/conf/bblayers.conf
     - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make machines
-    - ./ci-populate-artifacts.sh rocko
+    - ./ci-populate-artifacts.sh zeus
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch in the BRANCH variable
     - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master -F variables[BRANCH]=$CI_BUILD_REF_NAME https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
