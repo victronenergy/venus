@@ -110,11 +110,11 @@ conf/repos.conf: conf
 
 fetch: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
-	@grep -ve "meta-victronenergy-private" conf/repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
+	@grep -ve "meta-victronenergy-private" conf/repos.conf | while read p; do ./git-fetch-remote.sh $$p || exit 1; done
 
 fetch-all: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
-	@while read p; do ./git-fetch-remote.sh $$p; done <conf/repos.conf
+	@while read p; do ./git-fetch-remote.sh $$p || exit 1; done <conf/repos.conf
 
 fetch-install:
 	git clone git@git.victronenergy.com:ccgx/install.git
