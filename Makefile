@@ -110,7 +110,7 @@ conf/repos.conf: conf
 
 fetch: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
-	@grep -ve "git.victronenergy.com" conf/repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
+	@grep -ve "meta-victronenergy-private" conf/repos.conf | while read p; do ./git-fetch-remote.sh $$p; done
 
 fetch-all: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
