@@ -127,10 +127,10 @@ prereq:
 		python-gobject python-gtk2 python-dev
 
 cortexa7hf-sdk: build/conf/bblayers.conf
-	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
+	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte package-index
 
 cortexa8hf-sdk: build/conf/bblayers.conf
-	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
+	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte package-index
 
 sdks: cortexa7hf-sdk cortexa8hf-sdk
 
