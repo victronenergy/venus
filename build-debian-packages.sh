@@ -11,6 +11,7 @@ debian-buster|raspbian-buster)
 	;;
 esac
 
+make build/conf/bblayers.conf
 . ./sources/openembedded-core/oe-init-build-env build sources/bitbake
 export DISTRO=$1
 
