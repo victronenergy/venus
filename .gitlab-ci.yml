@@ -19,14 +19,14 @@ build-dunfell-full:
     - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
     - rm -rf /media/data/venus/sstate-cache-tmp
     - if [ "$SSTATE" = "yes" ]; then
-        export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make venus
+        export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make venus;
       else
-        export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus
+        export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus;
       fi
     - if [ "$SSTATE" != "yes" ]; then
-        mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old
-        mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache
-        rm -rf /media/data/venus/sstate-cache-old
+        mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old &&
+        mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache &&
+        rm -rf /media/data/venus/sstate-cache-old;
       fi
     - ./ci-populate-artifacts.sh dunfell
   stage: build
