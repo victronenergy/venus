@@ -146,7 +146,9 @@ swus: $(addsuffix -swu,$(MACHINES))
 
 # complete machine specific build / no sdk
 %-machine: build/conf/bblayers.conf
-	export MACHINE=$(subst -machine,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake packagegroup-venus packagegroup-venus-machine package-index
+	export MACHINE=$(subst -machine,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
+	bitbake packagegroup-venus packagegroup-venus-machine && \
+	bitbake package-index
 
 machines: $(addsuffix -machine,$(MACHINES))
 
