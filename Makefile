@@ -27,8 +27,12 @@ help:
 	@echo "  Venus uses swupdate (https://github.com/sbabic/swupdate) for reliable firmware updates"
 	@echo "    make beaglebone-swu"
 	@echo "      - Builds a swu file for the beaglebone, which can be installed by sd / usb / or remotely"
+	@echo "    make beaglebone-swu-large"
+	@echo "      - Builds the large variant of the same"
 	@echo "    make swus"
 	@echo "      - Builds swu files for all MACHINES"
+	@echo "    make swus-large"
+	@echo "      - Builds swu files for all MACHINES_LARGE"
 	@echo
 	@echo "  Building (bootable) images is also supported, but it depends on the machine"
 	@echo "    make beaglebone-venus-image"
@@ -142,10 +146,18 @@ sdks: cortexa7hf-sdk cortexa8hf-sdk
 %-swu: build/conf/bblayers.conf
 	export MACHINE=$(subst -swu,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
 
+%-swu-large: build/conf/bblayers.conf
+	export MACHINE=$(subst -swu-large,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu-large
+
 swu: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
 
+swu-large: build/conf/bblayers.conf
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu-large
+
 swus: $(addsuffix -swu,$(MACHINES))
+
+swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
 
 # complete machine specific build / no sdk
 %-machine: build/conf/bblayers.conf
@@ -174,15 +186,18 @@ venus-images: $(addsuffix -venus-image,$(MACHINES))
 
 MC_VENUS = $(addprefix mc:,$(addsuffix :packagegroup-venus,$(MACHINES)))
 MC_MACHINE = $(addprefix mc:,$(addsuffix :packagegroup-venus-machine,$(MACHINES)))
+MC_LARGE_SWUS = $(addprefix mc:,$(addsuffix :venus-swu-large,$(MACHINES_LARGE)))
 MC_A8_SDK = mc:ccgx:venus-sdk
 MC_SDKS = $(MC_A8_SDK)
 
 %-mc-swu: build/conf/bblayers.conf
 	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
+	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-swus: build/conf/bblayers.conf
 	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-sdks: build/conf/bblayers.conf
@@ -191,7 +206,7 @@ mc-sdks: build/conf/bblayers.conf
 
 mc-venus: build/conf/bblayers.conf
 	export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
-	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) && \
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) $(MC_LARGE_SWUS) && \
 	unset BBMULTICONFIG && bitbake package-index
 
 %-mc-bb: build/conf/bblayers.conf
@@ -200,4 +215,5 @@ mc-venus: build/conf/bblayers.conf
 
 mc-bb:  build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	export MACHINES_LARGE="$(MACHINES_LARGE)" && \
 	bash --init-file venus-init-build-env

@@ -64,4 +64,16 @@ for recipe in $recipes; do
 	done
 done
 
+# For machines with a large flash, additional images are also supported. Add them
+# as well when building for such a machine and MACHINES_LARGE_CMD is set.
+if [ "$MACHINES_LARGE" != "" ] && [ "$MACHINES_LARGE_CMD" != "" ]; then
+	for recipe in $MACHINES_LARGE_CMD; do
+		for machine in $MACHINES_LARGE; do
+			if echo "$BBMULTICONFIG" | grep -qE "(^| )$machine( |$)"; then
+				args="$args mc:$machine:$recipe"
+			fi
+		done
+	done
+fi
+
 exec bitbake $args

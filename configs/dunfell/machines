@@ -1,1 +1,2 @@
 MACHINES=einstein nanopi raspberrypi2 raspberrypi4 beaglebone ccgx canvu500
+MACHINES_LARGE=einstein nanopi raspberrypi2 raspberrypi4 beaglebone
