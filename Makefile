@@ -70,7 +70,7 @@ help:
 	@echo "      and being in metas.whitelist, if it doesn't exist. Just remove the mentioned file if"
 	@echo "      you want to update it forcefully, it will be regenerated."
 
-build/conf/bblayers.conf:
+build/conf/bblayers.conf: metas.whitelist
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
 	@echo 'BBPATH_EXTRA ??= ""' >> build/conf/bblayers.conf
 	@echo 'BBPATH = "$${BBPATH_EXTRA}$${TOPDIR}"' >> build/conf/bblayers.conf
