@@ -17,17 +17,7 @@ build-dunfell-full:
     SSTATE: "build from cache"
   script:
     - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
-    - rm -rf /media/data/venus/sstate-cache-tmp
-    - if [ "$SSTATE" = "yes" ]; then
-        export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make venus;
-      else
-        export BBPATH_EXTRA="$PWD/sites/ci-master:" && make venus;
-      fi
-    - if [ "$SSTATE" != "yes" ]; then
-        mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old &&
-        mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache &&
-        rm -rf /media/data/venus/sstate-cache-old;
-      fi
+    - make venus
     - ./ci-populate-artifacts.sh dunfell
   stage: build
   tags:
@@ -38,7 +28,7 @@ build-dunfell-full:
     paths:
     - artifacts-dunfell.tgz
   only:
-    - master
+    - b2.80
   except:
     - tags
 
@@ -56,7 +46,7 @@ build-dunfell:
     - linux
   except:
     - tags
-    - master
+    - b2.80
 
 build-debian-packages:
   # note: currently the sstate from the previous build is used, not the current one.
@@ -76,13 +66,13 @@ build-debian-packages:
     paths:
     - artifacts-deb.tgz
   only:
-    - master
+    - b2.80
   except:
     - tags
 
 deploy:
   only:
-    - master
+    - b2.80
   script:
     - rm -rf artifacts; find . -maxdepth 1 -name "artifacts-*.tgz" -exec tar -xf {} \;
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_BUILD_REF_NAME
