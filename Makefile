@@ -69,6 +69,9 @@ help:
 	@echo "    - Creates the bblayers.conf by looking at the repositories being checkout in sources"
 	@echo "      and being in metas.whitelist, if it doesn't exist. Just remove the mentioned file if"
 	@echo "      you want to update it forcefully, it will be regenerated."
+	@echo
+	@echo "multiconfig targets exists, which contain mc-, which is mainly useful for big builds on a machine"
+	@echo "which can run many threads in parallel. For common tasks it is slower since it parses more configs."
 
 build/conf/bblayers.conf: metas.whitelist
 	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
@@ -165,3 +168,36 @@ venus-image: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
 
 venus-images: $(addsuffix -venus-image,$(MACHINES))
+
+
+### multiconfig build targets
+
+MC_VENUS = $(addprefix mc:,$(addsuffix :packagegroup-venus,$(MACHINES)))
+MC_MACHINE = $(addprefix mc:,$(addsuffix :packagegroup-venus-machine,$(MACHINES)))
+MC_A8_SDK = mc:ccgx:venus-sdk
+MC_SDKS = $(MC_A8_SDK)
+
+%-mc-swu: build/conf/bblayers.conf
+	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
+
+mc-swus: build/conf/bblayers.conf
+	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
+
+mc-sdks: build/conf/bblayers.conf
+	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="ccgx" && \
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-sdk
+
+mc-venus: build/conf/bblayers.conf
+	export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) && \
+	unset BBMULTICONFIG && bitbake package-index
+
+%-mc-bb: build/conf/bblayers.conf
+	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -mc-bb,,$@) BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-bb,,$@)" && \
+	bash --init-file venus-init-build-env
+
+mc-bb:  build/conf/bblayers.conf
+	@export BITBAKEDIR=sources/bitbake BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	bash --init-file venus-init-build-env
