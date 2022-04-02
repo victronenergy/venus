@@ -186,7 +186,6 @@ venus-images: $(addsuffix -venus-image,$(MACHINES))
 
 MC_VENUS = $(addprefix mc:,$(addsuffix :packagegroup-venus,$(MACHINES)))
 MC_MACHINE = $(addprefix mc:,$(addsuffix :packagegroup-venus-machine,$(MACHINES)))
-MC_LARGE_SWUS = $(addprefix mc:,$(addsuffix :venus-swu-large,$(MACHINES_LARGE)))
 MC_A8_SDK = mc:ccgx:venus-sdk
 MC_SDKS = $(MC_A8_SDK)
 
@@ -206,7 +205,7 @@ mc-sdks: build/conf/bblayers.conf
 
 mc-venus: build/conf/bblayers.conf
 	export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
-	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) $(MC_LARGE_SWUS) && \
+	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) && \
 	unset BBMULTICONFIG && bitbake package-index
 
 %-mc-bb: build/conf/bblayers.conf
@@ -215,5 +214,4 @@ mc-venus: build/conf/bblayers.conf
 
 mc-bb:  build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
-	export MACHINES_LARGE="$(MACHINES_LARGE)" && \
 	bash --init-file venus-init-build-env
