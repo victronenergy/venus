@@ -134,7 +134,7 @@ cortexa8hf-sdk: build/conf/bblayers.conf
 	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake meta-toolchain-qte
 	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
 
-sdks: cortexa7hf-sdk cortexa8hf-sdk
+sdks: cortexa8hf-sdk
 
 %-swu: build/conf/bblayers.conf
 	export MACHINE=$(subst -swu,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
