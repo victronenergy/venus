@@ -206,7 +206,7 @@ mc-sdks: build/conf/bblayers.conf
 mc-venus: build/conf/bblayers.conf
 	export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) && \
-	unset BBMULTICONFIG && bitbake package-index
+	./bitbake-mc.sh package-index
 
 %-mc-bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -mc-bb,,$@) BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-bb,,$@)" && \
