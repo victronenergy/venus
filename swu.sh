@@ -12,7 +12,7 @@ update() {
 	fi
 
 	if [ -z "$type" ]; then
-		type=$(ssh $sshargs root@$host head -n1 /etc/venus/image-type)
+		type=$(ssh $sshargs root@$host 'if [ -f /etc/venus/image-type ]; then head -n1 /etc/venus/image-type; else echo -n normal; fi')
 	fi
 
 	case "$type" in
