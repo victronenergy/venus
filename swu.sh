@@ -50,6 +50,7 @@ while getopts "t:" o; do
 			;;
 		*)
 			echo "invalid image type: ${OPTARG}"
+			exit 1
 			;;
 		esac
 	esac
