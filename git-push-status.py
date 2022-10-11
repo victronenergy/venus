@@ -1,19 +1,18 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import subprocess
 
 """ more then likely git can do this itself, I don't know how though """
-
-branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
-removed_log = subprocess.check_output(["git", "log", "--oneline", branch + "..origin/" + branch]).strip()
-added_log = subprocess.check_output(["git", "log", "--oneline", "origin/" + branch + ".." + branch]).strip()
+branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], encoding='utf8').strip()
+removed_log = subprocess.check_output(["git", "log", "--oneline", branch + "..origin/" + branch], encoding='utf8').strip()
+added_log = subprocess.check_output(["git", "log", "--oneline", "origin/" + branch + ".." + branch], encoding='utf8').strip()
 
 removed = {}
 rewritten = {}
 added = {}
 
 def print_commits(commits):
-	for commit, msg in commits.iteritems():
+	for commit, msg in commits.items():
 		print(commit + " " + msg)
 
 if removed_log:
