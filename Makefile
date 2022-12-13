@@ -129,9 +129,9 @@ fetch-install:
 prereq:
 	@sudo apt-get install sed wget cvs subversion git-core \
 		coreutils unzip texi2html texinfo docbook-utils \
-		gawk python-pysqlite2 diffstat help2man make gcc build-essential g++ \
+		gawk diffstat help2man make gcc build-essential g++ \
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
-		python-gobject python-gtk2 python-dev
+		python3-dev
 
 cortexa7hf-sdk: build/conf/bblayers.conf
 	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
