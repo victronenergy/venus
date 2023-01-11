@@ -7,7 +7,7 @@
 #   clean builds.
 # - In Project Settings you can also increase the max build time, default 60
 #   minutes, to, for example, 180 minutes. 
-
+# insert a dummy line to trigger a build if the vpn failes
 stages:
   - build
   - deploy
