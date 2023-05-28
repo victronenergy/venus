@@ -28,6 +28,11 @@ update() {
 	machine=$(ssh $sshargs root@$host cat /etc/venus/machine)
 	swu_file="$swu_name$type_suffix-$machine.swu"
 
+	if [ ! -e $here/deploy/venus/images/$machine/$swu_file ]; then
+		echo "ERROR: the file doesn't exist: $swu_file. Use -t [normal|large] to force image type."
+		exit 1
+	fi
+
 	# Warn if the swu file being uploaded is not the one most recently build..
 	latest=$(find deploy -type f -regextype posix-egrep -regex '.*-[0-9]+-[^-]+\.swu$' | sed -E 's/.*-([0-9]+)-[^-]+\.swu$/\1/g' | sort -rn | head -n1)
 	swu_stamp=$(find deploy/ -name "$swu_file" -exec readlink {} \; | sed -E 's/.*-([0-9]+)-[^-]+\.swu$/\1/g')
