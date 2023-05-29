@@ -102,7 +102,7 @@ so you can do:
 ./repos push origin
 ./repos tag xyz
 
-it will push all, tag all etc. Likewise you can revert to a certain
+It will push all, tag all etc. Likewise you can revert to a certain
 revision with:
 
 ./repos checkout tagname
@@ -125,6 +125,9 @@ or if you have git 2.5+ ./repos diff @{push}
 # rebase your local checkout branches on upstream master
 ./repos fetch origin
 ./repos rebase 'origin/$checkout_branch'
+
+# checkout the branches as per used config
+./repos checkout '$checkout_branch'
 ````
 
 ### Releasing
