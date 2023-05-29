@@ -165,9 +165,17 @@ make fetch-all
 ./repos checkout -b b2.20
 ./repos push --set-upstream origin b2.20
 
-# update the rocko config to the new branch
+# update the used config to the new branch
 make update-repos.conf
-git commit -a -m "Pin Rocko & (most of the) raspbian branches to b2.20"
+git commit -a -m "pin dunfell branches to b2.20"
+
+# update the raspbian config to the new branch
+[
+  Now manually update the raspbian config file, and commit that as well.
+  See some earlier branch for example.
+]
+
+git commit -a -m "pin raspbian branches to b2.20"
 
 # Update gitlab-ci.yml
 [
