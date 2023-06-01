@@ -1,8 +1,10 @@
 bitbake.lock
+bitbake-cookerdaemon.log
 cache/
 conf/bblayers.conf
 conf/sanity_info
 conf/templateconf.cfg
+locked-sigs.inc
 pseudodone
 sstate-cache
 tmp-eglibc
