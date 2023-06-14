@@ -24,9 +24,9 @@ build-dunfell-full:
         export BBPATH_EXTRA="$PWD/sites/ci-master:" && make mc-venus;
       fi
     - if [ "$SSTATE" != "yes" ]; then
-        mv /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old &&
-        mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache &&
-        rm -rf /media/data/venus/sstate-cache-old;
+        [ -e /media/data/venus/sstate-cache] && mv -f /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old;
+        mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache;
+        [ -e /media/data/venus/sstate-cache-old ] && rm -rf /media/data/venus/sstate-cache-old;
       fi
     - ./ci-populate-artifacts.sh dunfell
   stage: build
