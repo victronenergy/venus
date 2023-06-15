@@ -78,6 +78,13 @@ function wic_images
 	find "$out" -type f -name "*.wic" -exec pigz {} \;
 }
 
+function backwards_compat
+{
+	tg="$images/cerbosgx"
+	mkdir "$tg"
+	find artifacts/images/einstein \( -type f -o -type l \) -exec ln -s $(realpath --relative-to="$tg" {}) "$tg" \;
+}
+
 function sdk
 {
 	if [ ! -d deploy/venus/sdk ]; then return; fi
@@ -95,6 +102,7 @@ image venus-install-sdcard img.zip
 image venus-swu swu
 wic_images
 image venus-upgrade-image zip
+backwards_compat
 sdk
 
 tar --use-compress-program=pigz -cf artifacts-$distro.tgz artifacts
