@@ -78,7 +78,7 @@ build-debian-packages:
     paths:
     - artifacts-deb.tgz
   only:
-    - skip
+    - master
   except:
     - tags
 
