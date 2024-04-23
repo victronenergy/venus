@@ -37,7 +37,9 @@ update() {
 	latest=$(find deploy -type f -regextype posix-egrep -regex '.*-[0-9]+-[^-]+\.swu$' | sed -E 's/.*-([0-9]+)-[^-]+\.swu$/\1/g' | sort -rn | head -n1)
 	swu_stamp=$(find deploy/ -name "$swu_file" -exec readlink {} \; | sed -E 's/.*-([0-9]+)-[^-]+\.swu$/\1/g')
 	if [ "$latest" != "$swu_stamp" ]; then
-		echo "WARNING: not uploading the latest build!"
+		RED='\033[0;31m'
+		NC='\033[0m' # No Color
+		echo -e "${RED}WARNING: not uploading the latest build!${NC}"
 	fi
 
 	cat $here/deploy/venus/images/$machine/$swu_file | ssh $sshargs root@$host /opt/victronenergy/swupdate-scripts/check-updates.sh -swu file:///dev/stdin
