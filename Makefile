@@ -121,7 +121,7 @@ fetch: conf/repos.conf
 
 fetch-all: conf/repos.conf
 	@rm -f build/conf/bblayers.conf
-	@while read p; do ./git-fetch-remote.sh $$p || exit 1; done <conf/repos.conf
+	@while read p; do ./git-fetch-remote.sh $$p $$SHALLOW || exit 1; done <conf/repos.conf
 
 fetch-install:
 	git clone git@git.victronenergy.com:ccgx/install.git

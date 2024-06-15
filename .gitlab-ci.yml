@@ -16,7 +16,7 @@ build-dunfell-full:
   variables:
     SSTATE: "build from cache"
   script:
-    - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
+    - make SHALLOW=shallow CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
     - if [ "$SSTATE" = "yes" ]; then
         export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
       else
@@ -44,7 +44,7 @@ build-dunfell-full:
 
 build-dunfell:
   script:
-    - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
+    - make SHALLOW=shallow CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
     - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make machines
     - ./ci-populate-artifacts.sh dunfell
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
@@ -66,7 +66,7 @@ build-debian-packages:
   # The problem with making this is a seperate stage is that the artifacts (which are
   # rather large) are going to be copied back and forth between the build stages as well)
   script:
-    - make CONFIG=raspbian reconf fetch-all build/conf/bblayers.conf
+    - make SHALLOW=shallow CONFIG=raspbian reconf fetch-all build/conf/bblayers.conf
     - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && ./build-all-debian-packages.sh
     - ./ci-populate-artifacts.sh deb
   stage: build

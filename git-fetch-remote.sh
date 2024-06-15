@@ -34,6 +34,12 @@ else
 	echo "export upstream_branch=" >> $prop
 fi
 
+# For CI, allow shallow fetching, its a bit faster
+if [ "$7" = "shallow" ]; then
+	git clone --depth=1 $2 $1
+	exit
+fi
+
 git clone --no-checkout $2 $1
 
 # set the upstream to push changes back
