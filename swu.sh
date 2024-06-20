@@ -34,8 +34,8 @@ update() {
 	fi
 
 	# Warn if the swu file being uploaded is not the one most recently build..
-	latest=$(find deploy -type f -regextype posix-egrep -regex '.*-[0-9]+-[^-]+\.swu$' | sed -E 's/.*-([0-9]+)-[^-]+\.swu$/\1/g' | sort -rn | head -n1)
-	swu_stamp=$(find deploy/ -name "$swu_file" -exec readlink {} \; | sed -E 's/.*-([0-9]+)-[^-]+\.swu$/\1/g')
+	latest=$(find deploy -type f -regextype posix-egrep -regex '.*-[0-9]+-[^-]+(-.+)?\.swu$' | sed -E 's/.*-([0-9]+)-.*$/\1/g' | sort -rn | head -n1)
+	swu_stamp=$(find deploy/ -name "$swu_file" -exec readlink {} \; | sed -E 's/.*-([0-9]+)-[^-]+(-.+)?\.swu$/\1/g')
 	if [ "$latest" != "$swu_stamp" ]; then
 		RED='\033[0;31m'
 		NC='\033[0m' # No Color
