@@ -21,6 +21,8 @@ function release ()
 	from="$D$1"
 	to="$D$2"
 	exclude=""
+	# Set this to only release large images. Note: it will rsync all packages.
+	# exclude="--include=images/* --include='images/*/venus-swu-*large-*' --include='images/*/venus-image-*large-*' --exclude=images/*/*"
 
 	echo $from $to
 	call "if [ ! -d $to ]; then mkdir $to; fi"
