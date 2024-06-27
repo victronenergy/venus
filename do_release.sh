@@ -8,6 +8,14 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
+call() {
+	# call ssh to run on a remotely
+	ssh $REMOTE "$@"
+
+	# run it locally instead for testing
+	# eval "$@"
+}
+
 function release ()
 {
 	from="$D$1"
@@ -15,20 +23,20 @@ function release ()
 	exclude=""
 
 	echo $from $to
-	ssh $REMOTE "if [ ! -d $to ]; then mkdir $to; fi"
+	call "if [ ! -d $to ]; then mkdir $to; fi"
 
 	# upload the files
-	ssh $REMOTE "rsync -v $exclude -rpt --no-links $from/ $to"
+	call "rsync -v $exclude -rpt --no-links $from/ $to"
 
 	# thereafter update the symlinks and in the end delete the old files
-	ssh $REMOTE "rsync -v $exclude -rptl $from/ $to"
+	call "rsync -v $exclude -rptl $from/ $to"
 
 	# keep all released images
 	if [ "$2" = "release" ]; then
 		exclude="$exclude --exclude=images/"
 	fi
 
-	ssh $REMOTE "rsync -v $exclude -rpt --delete $from/ $to"
+	call "rsync -v $exclude -rpt --delete $from/ $to"
 }
 
 case $1 in
