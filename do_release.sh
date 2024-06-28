@@ -23,22 +23,23 @@ function release ()
 	exclude=""
 	# Set this to only release large images. Note: it will rsync all packages.
 	# exclude="--include=images/* --include='images/*/venus-swu-*large-*' --include='images/*/venus-image-*large-*' --exclude=images/*/*"
+	args="-v"
 
 	echo $from $to
 	call "if [ ! -d $to ]; then mkdir $to; fi"
 
 	# upload the files
-	call "rsync -v $exclude -rpt --no-links $from/ $to"
+	call "rsync $args $exclude -rpt --no-links $from/ $to"
 
 	# thereafter update the symlinks and in the end delete the old files
-	call "rsync -v $exclude -rptl $from/ $to"
+	call "rsync $args $exclude -rptl $from/ $to"
 
 	# keep all released images
 	if [ "$2" = "release" ]; then
 		exclude="$exclude --exclude=images/"
 	fi
 
-	call "rsync -v $exclude -rpt --delete $from/ $to"
+	call "rsync $args $exclude -rpt --delete $from/ $to"
 }
 
 case $1 in
