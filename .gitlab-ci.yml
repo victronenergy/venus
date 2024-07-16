@@ -20,7 +20,7 @@ build-dunfell-full:
     - if [ "$SSTATE" = "yes" ]; then
         export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
       else
-        make mc-venus;
+        export BBPATH_EXTRA="$PWD/sites/ci-standalone:" && make mc-venus;
       fi
     - ./ci-populate-artifacts.sh dunfell
   stage: build
