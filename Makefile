@@ -131,7 +131,7 @@ prereq:
 		coreutils unzip texi2html texinfo docbook-utils \
 		gawk diffstat help2man make gcc build-essential g++ \
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
-		python3-dev
+		python3-dev python3-setuptools
 
 cortexa7hf-sdk: build/conf/bblayers.conf
 	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
