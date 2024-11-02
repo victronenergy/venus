@@ -17,7 +17,11 @@ build-dunfell-full:
     SSTATE: "build from cache"
   script:
     - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
-    - export BBPATH_EXTRA="$PWD/sites/ci-standalone:" && make mc-venus;
+    - if [ "$SSTATE" = "yes" ]; then
+        export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
+      else
+        export BBPATH_EXTRA="$PWD/sites/ci-standalone:" && make mc-venus;
+      fi
     - ./ci-populate-artifacts.sh dunfell
   stage: build
   tags:
