@@ -12,11 +12,11 @@ stages:
   - build
   - deploy
 
-build-dunfell-full:
+build-scarthgap-full:
   variables:
     SSTATE: "build from cache"
   script:
-    - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
     - if [ "$SSTATE" = "yes" ]; then
         export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
       else
@@ -28,7 +28,7 @@ build-dunfell-full:
         mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache;
         [ -e /media/data/venus/sstate-cache-old ] && rm -rf /media/data/venus/sstate-cache-old;
       fi
-    - ./ci-populate-artifacts.sh dunfell
+    - ./ci-populate-artifacts.sh scarthgap
   stage: build
   tags:
     - venus
@@ -36,17 +36,17 @@ build-dunfell-full:
   artifacts:
     expire_in: 1 week
     paths:
-    - artifacts-dunfell.tgz
+    - artifacts-scarthgap.tgz
   only:
     - master
   except:
     - tags
 
-build-dunfell:
+build-scarthgap:
   script:
-    - make CONFIG=dunfell reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
     - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make machines
-    - ./ci-populate-artifacts.sh dunfell
+    - ./ci-populate-artifacts.sh scarthgap
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch
     # in the BRANCH variable
