@@ -190,28 +190,28 @@ MC_A8_SDK = mc:ccgx:venus-sdk
 MC_SDKS = $(MC_A8_SDK)
 
 %-mc-swu: build/conf/bblayers.conf
-	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
 	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-swus: build/conf/bblayers.conf
-	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
 	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-sdks: build/conf/bblayers.conf
-	@export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="ccgx" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="ccgx" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-sdk
 
 mc-venus: build/conf/bblayers.conf
-	export BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) && \
 	./bitbake-mc.sh package-index
 
 %-mc-bb: build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -mc-bb,,$@) BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-bb,,$@)" && \
+	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -mc-bb,,$@) BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-bb,,$@)" && \
 	bash --init-file venus-init-build-env
 
 mc-bb:  build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake BB_ENV_EXTRAWHITE="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	@export BITBAKEDIR=sources/bitbake BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
 	bash --init-file venus-init-build-env
