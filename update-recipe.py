@@ -404,8 +404,9 @@ def commit_msg(pnline, lines):
 			continue
 
 		line = line.rstrip()
-		if not line.endswith('.'):
-			line += '.'
+		if not "://" in line:
+			if not line.endswith('.'):
+				line += '.'
 
 		n = lspaces(line)
 		if n < lspace:
@@ -419,6 +420,8 @@ def commit_msg(pnline, lines):
 		line = line[lspace:]
 		n = lspaces(line)
 		line = line.lstrip()
+		if not "://" in line and len(line) >= 1:
+			line = line[0].upper() + line[1:]
 		if n > last:
 			ident += 1
 		elif n < last:
