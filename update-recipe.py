@@ -513,7 +513,7 @@ else:
 			continue
 
 		if len(files) > 1:
-			print("More then one recipe find for " + pn + ":")
+			print("More then one recipe found for " + pn + ":")
 			print(" - \n".join(files))
 			continue
 
