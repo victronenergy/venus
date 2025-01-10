@@ -406,7 +406,6 @@ def commit_msg(pnline, lines):
 		line = line.rstrip()
 		if not line.endswith('.'):
 			line += '.'
-		line = re.sub(r"(^\s*)\*", r"\1", line)
 
 		n = lspaces(line)
 		if n < lspace:
@@ -483,7 +482,10 @@ else:
 			print("quiting")
 			exit(1)
 
-		pnline = lines[0]
+		for i, line in enumerate(lines):
+			lines[i] = re.sub(r'^(\s*)\*', r'\1', line)
+
+		pnline = lines[0].strip()
 		pnwords = pnline.split()
 		if len(pnwords) < 2:
 			print("expected at least pn and version as the first line")
