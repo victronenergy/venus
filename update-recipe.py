@@ -498,7 +498,16 @@ else:
 			pv = pv[1:]
 
 		srcdir = 'sources'
-		files = glob.glob('**/' + pn + '*.bb', root_dir=srcdir, recursive=True)
+		files = glob.glob('**/' + glob.escape(pn) + '*.bb', root_dir=srcdir, recursive=True)
+
+		filtered = []
+		matchversion = re.compile(re.escape(pn) + r"(_.+)?\.bb$")
+		for file in files:
+			basename = os.path.basename(file)
+			if matchversion.match(basename):
+				filtered.append(file)
+		files = filtered
+
 		if len(files) == 0:
 			print("No file found for " + pn)
 			continue
