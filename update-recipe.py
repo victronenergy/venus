@@ -61,20 +61,30 @@ def git_add(file):
 	info = find_repo(file)
 	subprocess.run(["git", "-C", info.repo, "add", info.bbfile])
 
-def git_diff(file):
-	info = find_repo(file)
-	subprocess.run(["git", "-C", info.repo, "diff", "--staged"])
+def git_diff(files):
+	done = []
+	for file in files:
+		info = find_repo(file)
+		if not info.repo in done:
+			subprocess.run(["git", "-C", info.repo, "diff", "--staged"])
+		done.append(info.repo)
 
-def git_commit(file, msg):
-	info = find_repo(file)
-	with tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8', delete_on_close=False) as fh:
-		fh.write(msg)
-		fh.close()
-		subprocess.run(["git", "-C", info.repo, "commit", "-e", "-F", fh.name])
+def git_commit(files, msg):
+	done = []
+	for file in files:
+		info = find_repo(file)
+		if not info.repo in done:
+			with tempfile.NamedTemporaryFile(mode='w+t', encoding='utf-8', delete_on_close=False) as fh:
+				fh.write(msg)
+				fh.close()
+				subprocess.run(["git", "-C", info.repo, "commit", "-e", "-F", fh.name])
+				done.append(info.repo)
 
-def git_nothing_to_commit(file):
-	info = find_repo(file)
-	rsp = subprocess.check_output(["git", "-C", info.repo, "diff", "--staged"], text=True)
+def git_nothing_to_commit(files):
+	rsp = ""
+	for file in files:
+		info = find_repo(file)
+		rsp += subprocess.check_output(["git", "-C", info.repo, "diff", "--staged"], text=True)
 	return rsp == ""
 
 # locate a variable definition in a bb recipe while preserving whitespace / formatting.
@@ -568,23 +578,38 @@ else:
 			print("expected at least pn and version as the first line")
 			continue
 
-		pn = pnwords[0].lower()
+		pns = [pnwords[0]]
 		pv = pnwords[-1]
 		if pv.startswith('v'):
 			pv = pv[1:]
 
-		bbfile = update_recipe(pn, pv)
+		include_next = False
+		for pn in pnwords[1:]:
+			if include_next:
+				pns.append(pn)
+				include_next = False
+				continue
+
+			if pn == "and":
+				include_next = True
+				continue
+
+		bbfiles = []
+		for pn in pns:
+			pn = pn.lower()
+			bbfile = update_recipe(pn, pv)
+			bbfiles.append(bbfile)
 
 		# and commit the changes (if any)
-		if git_nothing_to_commit(bbfile):
+		if git_nothing_to_commit(bbfiles):
 			print("nothing to commit, try again..")
 			continue
 
-		git_diff(bbfile)
+		git_diff(bbfiles)
 		if not yes("Does that look ok? [y]"):
 			print("Sorry, giving up....")
 			exit(1)
 
 		msg = commit_msg(pnline, lines[1:])
-		git_commit(bbfile, msg)
+		git_commit(bbfiles, msg)
 
