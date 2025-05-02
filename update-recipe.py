@@ -192,9 +192,10 @@ class Recipe(object):
 		self._src_rev = BitbakeVarDef("SRCREV", recipe=self)
 		self._pv = BitbakeVarDef("PV", recipe=self)
 		self._tag_regex = BitbakeVarDef("UPSTREAM_CHECK_GITTAGREGEX", recipe=self)
+		self._sha256sum =  BitbakeVarDef("SRC_URI[sha256sum]", recipe=self)
 
 	def valid(self):
-		return self._src_uris.found() and self.is_git_checkout()
+		return self._src_uris.found() and (self.is_git_checkout() or self.is_https_checkout())
 
 	def _save(self, filename):
 		if self._content is None:
@@ -279,7 +280,31 @@ class Recipe(object):
 			return None
 		return m['pver']
 
+	def update_https_by_pv(self, pv):
+		url = self.get_https_bburl()
+		url = url.replace('${PV}', pv)
+
+		fd, tmp = tempfile.mkstemp()
+		result = subprocess.run(["wget", "-O", tmp, url])
+		if result.returncode != 0:
+			warn("Failed to fetch " + url + " " + str(result.returncode))
+			return False
+
+		result = subprocess.run(["sha256sum", tmp], capture_output=True, encoding='utf8')
+		os.remove(tmp)
+		if result.returncode != 0:
+			warn("Failed to determined sha256sum for " + tmp)
+			return False
+
+		sha256 = result.stdout.split()[0]
+		self._sha256sum.set(sha256)
+		self.set_pv(pv)
+		return True
+
 	def update_by_pv(self, pv):
+		if self.is_https_checkout():
+			return self.update_https_by_pv(pv)
+
 		giturl = self.get_git_url()
 		if giturl is None:
 			warn("no git url found\n")
@@ -303,6 +328,19 @@ class Recipe(object):
 				return True
 
 		return False
+
+	def get_https_bburl(self):
+		ret = ""
+		count = 0
+		for src_uri in self._src_uris.words():
+			url = urllib.parse.urlparse(src_uri.split(";")[0])
+			if url.scheme == "https":
+				count += 1
+				ret = src_uri.split(";")[0]
+		return ret if count == 1 else ""
+
+	def is_https_checkout(self):
+		return self.get_https_bburl() and self._sha256sum.found()
 
 	def get_git_bburl(self):
 		if not self._src_uris.found():
