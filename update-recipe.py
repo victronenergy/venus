@@ -533,7 +533,7 @@ else:
 			continue
 
 		# lets find the recipe..
-		pn = pnwords[0]
+		pn = pnwords[0].lower()
 		pv = pnwords[-1]
 		if pv.startswith('v'):
 			pv = pv[1:]
