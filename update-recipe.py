@@ -476,6 +476,42 @@ def yes(msg):
 	answer = input(msg).strip().lower()
 	return answer in ('y', 'yes', '')
 
+def update_recipe(pn, pv):
+	# lets find the recipe..
+	srcdir = 'sources'
+	files = glob.glob('**/' + glob.escape(pn) + '*.bb', root_dir=srcdir, recursive=True)
+
+	filtered = []
+	matchversion = re.compile(re.escape(pn) + r"(_.+)?\.bb$")
+	for file in files:
+		basename = os.path.basename(file)
+		if matchversion.match(basename):
+			filtered.append(file)
+	files = filtered
+
+	if len(files) == 0:
+		print("No file found for " + pn)
+		return False
+
+	if len(files) > 1:
+		print("More then one recipe found for " + pn + ":")
+		print(" - \n".join(files))
+		return False
+
+	bbfile = os.path.join(srcdir, files[0])
+
+	# update the recipe
+	recipe = Recipe(bbfile)
+	if not recipe.valid():
+		print("not a recipe which directly checks out with git\n")
+		return False
+	recipe.check_tag_in_git_url()
+	if not recipe.update_by_pv(pv):
+		print("Failed to update " + pv)
+		return False
+	recipe.save()
+	return recipe._bbfile
+
 parser = argparse.ArgumentParser(
 	description = "Update SRCREV / PV etc in a recipe.",
 	epilog =	"When started without a filename, pasting items from the " +
@@ -532,54 +568,23 @@ else:
 			print("expected at least pn and version as the first line")
 			continue
 
-		# lets find the recipe..
 		pn = pnwords[0].lower()
 		pv = pnwords[-1]
 		if pv.startswith('v'):
 			pv = pv[1:]
 
-		srcdir = 'sources'
-		files = glob.glob('**/' + glob.escape(pn) + '*.bb', root_dir=srcdir, recursive=True)
-
-		filtered = []
-		matchversion = re.compile(re.escape(pn) + r"(_.+)?\.bb$")
-		for file in files:
-			basename = os.path.basename(file)
-			if matchversion.match(basename):
-				filtered.append(file)
-		files = filtered
-
-		if len(files) == 0:
-			print("No file found for " + pn)
-			continue
-
-		if len(files) > 1:
-			print("More then one recipe found for " + pn + ":")
-			print(" - \n".join(files))
-			continue
-
-		bbfile = os.path.join(srcdir, files[0])
-
-		# update the recipe
-		recipe = Recipe(bbfile)
-		if not recipe.valid():
-			print("not a recipe which directly checks out with git\n")
-			continue
-		recipe.check_tag_in_git_url()
-		if not recipe.update_by_pv(pv):
-			print("Failed to update " + pv)
-			continue
-		recipe.save()
+		bbfile = update_recipe(pn, pv)
 
 		# and commit the changes (if any)
-		if git_nothing_to_commit(recipe._bbfile):
+		if git_nothing_to_commit(bbfile):
 			print("nothing to commit, try again..")
 			continue
 
-		git_diff(recipe._bbfile)
+		git_diff(bbfile)
 		if not yes("Does that look ok? [y]"):
 			print("Sorry, giving up....")
 			exit(1)
 
 		msg = commit_msg(pnline, lines[1:])
-		git_commit(recipe._bbfile, msg)
+		git_commit(bbfile, msg)
+
