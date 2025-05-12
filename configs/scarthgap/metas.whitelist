@@ -1,3 +1,5 @@
+sources/meta-lts-mixin-go
+sources/meta-lts-mixin-rust
 sources/meta-openembedded/meta-multimedia
 sources/meta-openembedded/meta-networking
 sources/meta-openembedded/meta-oe
