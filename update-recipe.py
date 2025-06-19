@@ -598,6 +598,8 @@ else:
 		for pn in pns:
 			pn = pn.lower()
 			bbfile = update_recipe(pn, pv)
+			if bbfile == False:
+				continue
 			bbfiles.append(bbfile)
 
 		# and commit the changes (if any)
