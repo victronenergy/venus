@@ -28,6 +28,10 @@ function release ()
 	echo $from $to
 	call "if [ ! -d $to ]; then mkdir $to; fi"
 
+	if [ "$2" = "release" ]; then
+		exclude="$exclude --exclude=images/ccgx/venus-swu-ccgx.swu"
+	fi
+
 	# upload the files
 	call "rsync $args $exclude -rpt --no-links $from/ $to"
 
