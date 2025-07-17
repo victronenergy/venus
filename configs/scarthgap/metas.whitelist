@@ -7,6 +7,7 @@ sources/meta-openembedded/meta-python
 sources/meta-openembedded/meta-webserver
 sources/meta-qt6
 sources/meta-swupdate
+sources/meta-venus-backports
 sources/meta-victronenergy/meta-alternatives
 sources/meta-victronenergy/meta-backports
 sources/meta-victronenergy/meta-bsp
