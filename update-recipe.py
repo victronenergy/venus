@@ -573,6 +573,7 @@ else:
 			lines[i] = re.sub(r'^(\s*)\*', r'\1', line)
 
 		pnline = lines[0].strip()
+		pnline = re.sub(r'\s*\([^)]*\)$', '', pnline)
 		pnwords = pnline.split()
 		if len(pnwords) < 2:
 			print("expected at least pn and version as the first line")
