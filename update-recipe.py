@@ -293,6 +293,7 @@ class Recipe(object):
 	def update_https_by_pv(self, pv):
 		url = self.get_https_bburl()
 		url = url.replace('${PV}', pv)
+		url = url.replace('${BPN}', self._known_pn)
 
 		fd, tmp = tempfile.mkstemp()
 		result = subprocess.run(["wget", "-O", tmp, url])
