@@ -12,7 +12,7 @@ metas = {
 		"branch": "upstream/master"
 	},
 	"meta-openembedded": {
-		"since": "3b6e1fa190e275b055e50f9fad383613c70511a2",
+		"since": "a0a114361758cd07143c6d960dde311479e79d27",
 		"branch": "upstream/master"
 	}
 }
