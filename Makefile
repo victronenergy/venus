@@ -141,7 +141,11 @@ cortexa8hf-sdk: build/conf/bblayers.conf
 	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
 	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
 
-sdks: cortexa7hf-sdk cortexa8hf-sdk
+aarch64-sdk: build/conf/bblayers.conf
+	export MACHINE=dummy-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
+	export MACHINE=dummy-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
+
+sdks: cortexa7hf-sdk cortexa8hf-sdk aarch64-sdk
 
 %-swu: build/conf/bblayers.conf
 	export MACHINE=$(subst -swu,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
@@ -188,7 +192,7 @@ MC_VENUS = $(addprefix mc:,$(addsuffix :packagegroup-venus,$(MACHINES)))
 MC_MACHINE = $(addprefix mc:,$(addsuffix :packagegroup-venus-machine,$(MACHINES)))
 MC_OPTIONAL = $(addprefix mc:,$(addsuffix :packagegroup-venus-optional-packages,$(MACHINES)))
 MC_A8_SDK = mc:ccgx:venus-sdk
-MC_SDKS = $(MC_A8_SDK)
+MC_SDKS = $(MC_A8_SDK) mc:sdk-aarch64:venus-sdk
 
 %-mc-swu: build/conf/bblayers.conf
 	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
@@ -201,11 +205,11 @@ mc-swus: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-sdks: build/conf/bblayers.conf
-	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="ccgx" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="ccgx sdk-aarch64" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-sdk
 
 mc-venus: build/conf/bblayers.conf
-	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) sdk-aarch64" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) $(MC_OPTIONAL) && \
 	./bitbake-mc.sh package-index
 
