@@ -572,6 +572,7 @@ else:
 
 		for i, line in enumerate(lines):
 			lines[i] = re.sub(r'^(\s*)\*', r'\1', line)
+			lines[i] = re.sub(r'\s*\([^)]*\)$', '', lines[i])
 
 		pnline = lines[0].strip()
 		pnline = re.sub(r'\s*\([^)]*\)$', '', pnline)
