@@ -478,7 +478,7 @@ def commit_msg(pnline, lines):
 
 		init = "  " * (ident - 1) + ("- " if ident > 0 else "")
 		sub = "  " * ident
-		msg += "\n".join(textwrap.wrap(line, initial_indent=init, subsequent_indent=sub)) + "\n"
+		msg += "\n".join(textwrap.wrap(line, initial_indent=init, subsequent_indent=sub, width=84)) + "\n"
 		last = n
 
 	return msg
