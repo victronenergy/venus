@@ -142,8 +142,8 @@ cortexa8hf-sdk: build/conf/bblayers.conf
 	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
 
 aarch64-sdk: build/conf/bblayers.conf
-	export MACHINE=dummy-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
-	export MACHINE=dummy-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
+	export MACHINE=sdk-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
+	export MACHINE=sdk-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
 
 sdks: cortexa7hf-sdk cortexa8hf-sdk aarch64-sdk
 
