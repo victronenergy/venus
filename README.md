@@ -250,3 +250,9 @@ if can be fixed with:
   bitbake -c cleanall packagegroup-machine-base
 
 and thereafter try again
+
+#### 2. Rust crates
+If there are errors about crates missing, cleanall rust recipes:
+
+it can be fixed with:
+  bitbake -c cleanall python3-cryptography python3-orjson python3-bcrypt
