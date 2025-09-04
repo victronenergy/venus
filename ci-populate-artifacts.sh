@@ -30,7 +30,7 @@ function ipkgs
 		cp -r deploy/venus/ipk $dst
 
 		# remove unused packages
-		find $dst -name "*-dbg_*.ipk" -exec rm {} \;
+		find $dst -name "*-dbg_*.ipk" -a -not -name "libc6-dbg_*.ipk" -exec rm {} \;
 		find $dst -type d -name i686-nativesdk -prune -exec rm -rf {} \;
 		find $dst -type d -name x86_64-nativesdk -prune -exec rm -rf {} \;
 	fi
