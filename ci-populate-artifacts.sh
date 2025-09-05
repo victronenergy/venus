@@ -20,6 +20,45 @@ function debs
 	done
 }
 
+function check_dbg_pkg
+{
+	ipk="$1"
+
+	meta="$(dpkg-deb -W  --showformat '${Venus-Layer}' $ipk)"
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
+	meta="${meta%%/*}"
+
+	if [ "$meta" == "meta-victronenergy-private" ]; then
+		return 1
+	fi
+
+	license="$(dpkg-deb -W  --showformat '${License}' $ipk)"
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
+	license="${license^^}"
+
+	case "$license" in
+		*CLOSED*)
+			return 1
+			;;
+		*)
+			;;
+	esac
+
+	return 0
+}
+
+function handle_dbg_pkg
+{
+	ipk="$1"
+
+	if ! check_dbg_pkg "$1"; then
+		rm $ipk
+	fi
+}
 
 function ipkgs
 {
@@ -30,9 +69,12 @@ function ipkgs
 		cp -r deploy/venus/ipk $dst
 
 		# remove unused packages
-		find $dst -name "*-dbg_*.ipk" -a -not -name "libc6-dbg_*.ipk" -exec rm {} \;
 		find $dst -type d -name i686-nativesdk -prune -exec rm -rf {} \;
 		find $dst -type d -name x86_64-nativesdk -prune -exec rm -rf {} \;
+
+		# check packages
+		find $dst -name "*-dbg_*.ipk" | while read ipk; do handle_dbg_pkg "$ipk"; done
+		find $dst -name "*-src_*.ipk" | while read ipk; do handle_dbg_pkg "$ipk"; done
 	fi
 }
 
