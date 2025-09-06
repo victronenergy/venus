@@ -37,10 +37,6 @@ build-scarthgap-full:
   tags:
     - venus
     - linux
-  only:
-    - master
-  except:
-    - tags
   rules:
     - when: manual
 
