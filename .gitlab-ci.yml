@@ -27,6 +27,7 @@ build-scarthgap-full:
         mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache;
         [ -e /media/data/venus/sstate-cache-old ] && rm -rf /media/data/venus/sstate-cache-old;
       fi
+    - rm -rf build/tmp-glibc
     - ./ci-populate-artifacts.sh scarthgap
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
