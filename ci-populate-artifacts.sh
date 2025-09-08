@@ -139,4 +139,3 @@ wic_images
 image venus-upgrade-image zip
 sdk
 
-tar --use-compress-program=pigz -cf artifacts-$distro.tgz artifacts
