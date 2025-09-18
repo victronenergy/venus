@@ -40,7 +40,7 @@ build-scarthgap-full:
     - venus
     - linux
   rules:
-    - when: manual
+    - when: web
 
 build-scarthgap:
   script:
