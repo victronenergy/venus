@@ -40,7 +40,8 @@ build-scarthgap-full:
     - venus
     - linux
   rules:
-    - when: web
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: never
 
 build-scarthgap:
   script:
