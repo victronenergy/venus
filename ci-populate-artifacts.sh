@@ -131,6 +131,18 @@ function sdk
 	cp -r $src/* $sdk
 }
 
+# The cerbosgx is compatible with newer einstein images, but not the
+# old ones. The swupdate hardware check now covers this, so it can
+# become part of the einstein image. Keep symlinks in the old location
+# to convert existing products and for people expecting it there.
+function compat_symlinks
+{
+	mkdir $images/cerbosgx
+	for img in $(find -L "$images/einstein" -type f -printf "%f\n"); do
+		ln -sfr $images/einstein/$img $images/cerbosgx/$img
+	done
+}
+
 debs
 ipkgs
 image venus-install-sdcard img.zip
@@ -138,4 +150,4 @@ image venus-swu swu
 wic_images
 image venus-upgrade-image zip
 sdk
-
+compat_symlinks
