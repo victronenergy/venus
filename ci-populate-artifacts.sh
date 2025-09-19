@@ -139,7 +139,8 @@ function compat_symlinks
 {
 	mkdir $images/cerbosgx
 	for img in $(find -L "$images/einstein" -type f -printf "%f\n"); do
-		ln -sfr $images/einstein/$img $images/cerbosgx/$img
+		sgxname=$(echo "$img" | sed 's,-einstein,-cerbosgx,')
+		ln -sfr $images/einstein/$img $images/cerbosgx/$sgxname
 	done
 }
 
