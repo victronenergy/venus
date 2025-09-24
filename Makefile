@@ -99,6 +99,7 @@ bb: build/conf/bblayers.conf
 clean-keep-sstate:
 	@rm -rf build/tmp-eglibc
 	@rm -rf build/tmp-glibc
+	@rm -rf build/tmp
 	@rm -rf deploy
 	@rm -f build/conf/bblayers.conf
 
