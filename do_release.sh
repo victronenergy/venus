@@ -51,6 +51,10 @@ case $1 in
 		echo "Candidate -> Release"
 		release candidate release
 		;;
+	backup )
+		echo "Candidate -> Backup"
+		release candidate backup
+		;;
 	candidate )
 		echo "Testing -> Candidate"
 		release testing candidate
