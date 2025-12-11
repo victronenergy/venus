@@ -1,2 +1,2 @@
-MACHINES=einstein nanopi ekrano raspberrypi2 raspberrypi4 beaglebone ccgx canvu500
-MACHINES_LARGE=einstein nanopi ekrano raspberrypi2 raspberrypi4 beaglebone
+MACHINES=einstein nanopi ekrano raspberrypi2 raspberrypi4 raspberrypi5 beaglebone ccgx canvu500
+MACHINES_LARGE=einstein nanopi ekrano raspberrypi2 raspberrypi4 raspberrypi5 beaglebone
