@@ -15,6 +15,9 @@ build-scarthgap-full:
   variables:
     SSTATE: "build from cache"
   script:
+    - rm -rf /mnt/ram/deploy
+    - mkdir /mnt/ram/deploy
+    - ln -s /mnt/ram/deploy deploy
     - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
     - if [ "$SSTATE" = "yes" ]; then
         export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
