@@ -193,7 +193,7 @@ MC_VENUS = $(addprefix mc:,$(addsuffix :packagegroup-venus,$(MACHINES)))
 MC_MACHINE = $(addprefix mc:,$(addsuffix :packagegroup-venus-machine,$(MACHINES)))
 MC_OPTIONAL = $(addprefix mc:,$(addsuffix :packagegroup-venus-optional-packages,$(MACHINES)))
 MC_A8_SDK = mc:ccgx:venus-sdk
-MC_SDKS = $(MC_A8_SDK) mc:sdk-aarch64:venus-sdk
+MC_SDKS = $(MC_A8_SDK)
 
 %-mc-swu: build/conf/bblayers.conf
 	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \

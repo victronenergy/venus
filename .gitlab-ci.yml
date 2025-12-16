@@ -25,12 +25,14 @@ build-scarthgap-full:
         rm -rf /media/data/venus/sstate-cache-tmp;
         export BBPATH_EXTRA="$PWD/sites/ci-master:" && make mc-venus;
       fi
+    - make clean-keep-sstate
+    - make raspberrypi5-machine aarch64-sdk
     - if [ "$SSTATE" != "yes" ]; then
         [ -e /media/data/venus/sstate-cache ] && mv -f /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old;
         mv /media/data/venus/sstate-cache-tmp /media/data/venus/sstate-cache;
         [ -e /media/data/venus/sstate-cache-old ] && rm -rf /media/data/venus/sstate-cache-old;
       fi
-    - rm -rf build/tmp-glibc
+    - make clean
     - ./ci-populate-artifacts.sh scarthgap
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
