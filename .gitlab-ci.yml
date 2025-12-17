@@ -25,7 +25,7 @@ build-scarthgap-full:
         rm -rf /media/data/venus/sstate-cache-tmp;
         export BBPATH_EXTRA="$PWD/sites/ci-master:" && make mc-venus;
       fi
-    - make clean-keep-sstate
+    - rm -rf build/tmp*
     - make raspberrypi5-machine aarch64-sdk
     - if [ "$SSTATE" != "yes" ]; then
         [ -e /media/data/venus/sstate-cache ] && mv -f /media/data/venus/sstate-cache /media/data/venus/sstate-cache-old;
