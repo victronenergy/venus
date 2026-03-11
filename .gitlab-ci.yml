@@ -19,13 +19,13 @@ build-scarthgap-full:
     - if [ "$SSTATE" = "yes" ]; then
         export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
       else
-        rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-tmp;
+        rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-tmp-3.8x;
         export BBPATH_EXTRA="$PWD/sites/ci-master:" && make mc-venus;
       fi
     - if [ "$SSTATE" != "yes" ]; then
-        [ -e /mnt/persistent/venus_ci_shared/sstate-cache ] && mv -f /mnt/persistent/venus_ci_shared/sstate-cache /mnt/persistent/venus_ci_shared/sstate-cache-old;
-        mv /mnt/persistent/venus_ci_shared/sstate-cache-tmp /mnt/persistent/venus_ci_shared/sstate-cache;
-        [ -e /mnt/persistent/venus_ci_shared/sstate-cache-old ] && rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-old;
+        [ -e /mnt/persistent/venus_ci_shared/sstate-cache-3.8x ] && mv -f /mnt/persistent/venus_ci_shared/sstate-cache-3.8x /mnt/persistent/venus_ci_shared/sstate-cache-old-3.8x;
+        mv /mnt/persistent/venus_ci_shared/sstate-cache-tmp-3.8x /mnt/persistent/venus_ci_shared/sstate-cache-3.8x;
+        [ -e /mnt/persistent/venus_ci_shared/sstate-cache-old-3.8x ] && rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-old-3.8x;
       fi
     - rm -rf build/tmp*
     - ./ci-populate-artifacts.sh scarthgap
@@ -40,7 +40,7 @@ build-scarthgap-full:
     - vic-alm-build-p02
     - venus
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == "b3.80" && $CI_PIPELINE_SOURCE == "web"'
       when: always
     - when: never
 
@@ -60,5 +60,5 @@ build-scarthgap:
     - venus
   except:
     - tags
-    - master
+    - b3.80
 
