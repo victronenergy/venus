@@ -40,7 +40,7 @@ build-scarthgap-full:
     - vic-alm-build-p02
     - venus
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == "b3.70" && $CI_PIPELINE_SOURCE == "web"'
       when: always
     - when: never
 
@@ -60,5 +60,5 @@ build-scarthgap:
     - venus
   except:
     - tags
-    - master
+    - b3.70
 
