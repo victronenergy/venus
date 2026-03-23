@@ -23,7 +23,7 @@ build-scarthgap-full:
         export BBPATH_EXTRA="$PWD/sites/ci-master:" && make mc-venus;
       fi
     - if [ "$SSTATE" != "yes" ]; then
-        [ -e /mnt/persistent/venus_ci_shared/sstate-cache-3.7x ] && mv -f /mnt/persistent/venus_ci_shared/state-cache-3.7x /mnt/persistent/venus_ci_shared/sstate-cache-old-3.7x;
+        [ -e /mnt/persistent/venus_ci_shared/sstate-cache-3.7x ] && mv -f /mnt/persistent/venus_ci_shared/sstate-cache-3.7x /mnt/persistent/venus_ci_shared/sstate-cache-old-3.7x;
         mv /mnt/persistent/venus_ci_shared/sstate-cache-tmp-3.7x /mnt/persistent/venus_ci_shared/sstate-cache-3.7x;
         [ -e /mnt/persistent/venus_ci_shared/sstate-cache-old-3.7x ] && rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-old-3.7x;
       fi
