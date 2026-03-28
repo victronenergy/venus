@@ -137,7 +137,7 @@ function sdk
 # to convert existing products and for people expecting it there.
 function compat_symlinks
 {
-	mkdir $images/cerbosgx
+	mkdir -p $images/cerbosgx
 	for img in $(find -L "$images/einstein" -type f -printf "%f\n"); do
 		sgxname=$(echo "$img" | sed 's,-einstein,-cerbosgx,')
 		ln -sfr $images/einstein/$img $images/cerbosgx/$sgxname

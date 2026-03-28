@@ -1,7 +1,6 @@
 DEPLOY=deploy/venus
 REMOTE=victron_www@updates-origin.victronenergy.com
 D=/var/www/victron_www/feeds/venus/
-FEED="$REMOTE:$OPKG"
 
 if [ $# -eq 0 ]; then
 	echo "Usage: $0 release|candidate|testing"

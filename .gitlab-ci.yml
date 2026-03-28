@@ -32,7 +32,7 @@ build-scarthgap-full:
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch in the BRANCH variable
-    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master -F variables[BRANCH]=$CI_COMMIT_REF_NAME \
+    - "curl -X POST -F token=$VENUS_TESTS_TRIGGER_TOKEN -F ref=master -F variables[BRANCH]=$CI_COMMIT_REF_NAME \
       -F variables[PUSH_TO_TESTING]=yes https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
     - make clean
   stage: build
@@ -52,7 +52,7 @@ build-scarthgap:
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch
     # in the BRANCH variable
-    - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master \
+    - "curl -X POST -F token=$VENUS_TESTS_TRIGGER_TOKEN -F ref=master \
       -F variables[BRANCH]=$CI_COMMIT_REF_NAME https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
   stage: build
   tags:

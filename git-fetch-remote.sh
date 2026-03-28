@@ -47,14 +47,14 @@ fi
 # optionally checkout a branch
 if [ "$5" != "-" ]; then
 	git --git-dir=$1/.git --work-tree=$1 checkout "$5"
-fi
 
-# Set the checkout branch as default upstream branch
-#
-# Switching to OE point venus is based on can be done with:
-# ./repos branch -u 'origin/$upstream_branch'
-#
-git --git-dir=$1/.git --work-tree=$1 branch -u "origin/$5"
+	# Set the checkout branch as default upstream branch
+	#
+	# Switching to OE point venus is based on can be done with:
+	# ./repos branch -u 'origin/$upstream_branch'
+	#
+	git --git-dir=$1/.git --work-tree=$1 branch -u "origin/$5"
+fi
 
 echo "Set git config log.follow=true, to handle all the recipe renames"
 git --git-dir=$1/.git --work-tree=$1 config log.follow true

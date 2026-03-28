@@ -28,7 +28,7 @@ if added_log != "":
 
 		if msg in removed.values():
 			rewritten[commit] = msg
-			del removed[removed.keys()[removed.values().index(msg)]]
+			del removed[list(removed.keys())[list(removed.values()).index(msg)]]
 		else:
 			added[commit] = msg
 
