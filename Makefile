@@ -191,6 +191,11 @@ venus-images: $(addsuffix -venus-image,$(MACHINES))
 
 MC_VENUS = $(addprefix mc:,$(addsuffix :packagegroup-venus,$(MACHINES)))
 MC_MACHINE = $(addprefix mc:,$(addsuffix :packagegroup-venus-machine,$(MACHINES)))
+# The k3r5 is actually a machine dependency of the am62xx, but is a different ARCH and hence
+# a diffent machine. There might be some method to explain this depedency, but for now it is
+# hardcoded here and always loaded for mc-swus and mc-venus. am62xx-mc-swu will fail, otherwise
+# it would always be needed to load it even when not used.
+MC_MACHINE_DEPS = k3r5
 MC_OPTIONAL = $(addprefix mc:,$(addsuffix :packagegroup-venus-optional-packages,$(MACHINES)))
 MC_A8_SDK = mc:ccgx:venus-sdk
 MC_SDKS = $(MC_A8_SDK) mc:sdk-aarch64:venus-sdk
@@ -201,7 +206,7 @@ MC_SDKS = $(MC_A8_SDK) mc:sdk-aarch64:venus-sdk
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-swus: build/conf/bblayers.conf
-	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS)" && \
 	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
@@ -210,7 +215,7 @@ mc-sdks: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-sdk
 
 mc-venus: build/conf/bblayers.conf
-	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) sdk-aarch64" && \
+	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS) sdk-aarch64" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) $(MC_OPTIONAL) && \
 	./bitbake-mc.sh package-index
 
