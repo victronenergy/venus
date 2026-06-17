@@ -215,6 +215,10 @@ mc-sdks: build/conf/bblayers.conf
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-sdk
 
 mc-venus: build/conf/bblayers.conf
+	# For some reason the mc:k3r5:u-boot-k3r5 doesn't seem to work, just build it first.
+	export MACHINE=am62xx && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
+	 bitbake mc:k3r5:u-boot-k3r5
+
 	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS) sdk-aarch64" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) $(MC_OPTIONAL) && \
 	./bitbake-mc.sh package-index
