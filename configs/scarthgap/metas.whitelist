@@ -2,9 +2,11 @@ sources/meta-lts-mixin-go
 sources/meta-lts-mixin-rust
 sources/meta-openembedded/meta-multimedia
 sources/meta-openembedded/meta-networking
+sources/meta-openembedded/meta-filesystems
 sources/meta-openembedded/meta-oe
 sources/meta-openembedded/meta-python
 sources/meta-openembedded/meta-webserver
+sources/meta-virtualization
 sources/meta-qt6
 sources/meta-swupdate
 sources/meta-venus-backports
