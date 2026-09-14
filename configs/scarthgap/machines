@@ -1,2 +1,3 @@
 MACHINES=einstein nanopi ekrano raspberrypi2 raspberrypi4 raspberrypi5 beaglebone ccgx canvu500 am62xx
 MACHINES_LARGE=einstein nanopi ekrano raspberrypi2 raspberrypi4 raspberrypi5 beaglebone am62xx
+MACHINES_OCI=amd64-oci arm64-oci armv7-oci

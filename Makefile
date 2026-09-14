@@ -1,4 +1,4 @@
-.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images oci oci-push oci-push-beta oci-push-release $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES)) $(MACHINES_OCI) $(addsuffix -push,$(MACHINES_OCI)) $(addsuffix -push-beta,$(MACHINES_OCI)) $(addsuffix -push-release,$(MACHINES_OCI))
 
 SHELL = bash
 CONFIG ?= scarthgap
@@ -33,6 +33,23 @@ help:
 	@echo "      - Builds swu files for all MACHINES"
 	@echo "    make swus-large"
 	@echo "      - Builds swu files for all MACHINES_LARGE"
+	@echo
+	@echo "  Containers (core venus services + WASM GUI, no GUIv2, runnable via docker)"
+	@echo "    make arm64-oci"
+	@echo "      - Builds + imports into the local docker store in one step. Result:"
+	@echo "        deploy/venus/images/arm64-oci/venus-image-oci-arm64-oci.tar.gz - a"
+	@echo "        repo-pushable file (docker load it anywhere, then tag+push)."
+	@echo "        Needs docker on PATH. Other MACHINES_OCI: armv7-oci, amd64-oci"
+	@echo "    make oci"
+	@echo "      - Builds + imports all of MACHINES_OCI"
+	@echo "    make arm64-oci-push"
+	@echo "      - Rebuilds arm64-oci (bitbake is incremental) then packages+pushes it via a"
+	@echo "        real 'docker build' to GHCR_REPO (default ghcr.io/nmbath/venusoci), tagged"
+	@echo "        with VenusOS's own DISTRO_VERSION (v3.80 = release, v3.80~46 = beta)."
+	@echo "    make arm64-oci-push-beta / make arm64-oci-push-release"
+	@echo "      - Same, but also tags+pushes a moving beta-arm64-oci / release-arm64-oci"
+	@echo "        channel tag alongside the pinned version tag."
+	@echo "        Requires 'docker login ghcr.io' first."
 	@echo
 	@echo "  Building (bootable) images is also supported, but it depends on the machine"
 	@echo "    make beaglebone-venus-image"
@@ -163,6 +180,36 @@ swu-large: build/conf/bblayers.conf
 swus: $(addsuffix -swu,$(MACHINES))
 
 swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
+
+# builds + imports the container rootfs for MACHINE=arm64-oci etc, see MACHINES_OCI
+%-oci: build/conf/bblayers.conf
+	export MACHINE=$@ && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image-oci
+	./container-import.sh $@
+
+oci: $(MACHINES_OCI)
+
+# rebuilds (bitbake is incremental) then packages+pushes via container-push.sh
+%-oci-push: %-oci
+	./container-push.sh $*-oci
+
+oci-push: $(addsuffix -push,$(MACHINES_OCI))
+
+# same, plus a moving beta-<machine>/release-<machine> tag
+%-oci-push-beta: %-oci
+	./container-push.sh $*-oci beta
+
+%-oci-push-release: %-oci
+	./container-push.sh $*-oci release
+
+# only meaningful once all three machines are pushed (needs every
+# per-machine image to exist already), so this is a recipe on the
+# aggregate target, not on %-oci-push-beta/-release - a single-machine
+# invocation like `make arm64-oci-push-beta` skips it.
+oci-push-beta: $(addsuffix -push-beta,$(MACHINES_OCI))
+	./container-push-manifest.sh beta
+
+oci-push-release: $(addsuffix -push-release,$(MACHINES_OCI))
+	./container-push-manifest.sh release
 
 # complete machine specific build / no sdk
 %-machine: build/conf/bblayers.conf
