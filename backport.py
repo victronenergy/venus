@@ -117,7 +117,7 @@ def apply_patches(patches: dict, src_git :str, tg_git: str, bbdir: str):
 		patch = subprocess.check_output(["git", "-C", src_git, "format-patch", "--stdout", "-1", hash, bbdir], text=True)
 		p = subprocess.run(["git", "-C", tg_git, "am", "--directory", repo], input=patch, capture_output=True, text=True)
 		if p.returncode != 0:
-			raise Exception("applying patch failed" + p.stderr)
+			raise Exception("applying patch failed: " + p.stderr)
 
 		trailer = track_trailer(repo, hash)
 		subprocess.check_output(["git", "-C", tg_git, "commit", "--amend", "--no-edit", "--trailer", trailer], text=True)
