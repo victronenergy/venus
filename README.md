@@ -65,6 +65,9 @@ make beaglebone-venus-image
 # build the swu file only
 make ccgx-swu
 
+# build a container version
+make armv7-oci
+
 # build from within the bitbake shell.
 # this will have the same end result as make ccgx-swu
 make ccgx-bb
@@ -236,6 +239,70 @@ Changes need to be either really small, well tested or very important
 To build, create a pipeline on the mirrors/venus repo, and run it for the
 maintenance branch. No variables needed.
 
+### container-gx variant for containers
+
+#### Step 1 — Build: `make <machine>-oci`
+
+```sh
+make arm64-oci
+make amd64-oci
+make armv7-oci
+```
+
+BitBake creates its standard OCI archive, and the make target converts it into
+an archive that Docker can load:
+
+- `venus-oci-<version>-oci.tar` is the OCI archive used for publishing.
+- `venus-oci-<machine>-<datetime>-<version>-loadable.tar` can be loaded by
+  Docker or Podman. `venus-oci-<machine>-loadable.tar` points to the latest one.
+
+```sh
+docker load -i deploy/venus/images/arm64/venus-oci-arm64-loadable.tar
+```
+
+The container starts `/sbin/init` and by default exposes the HTTP (80),
+HTTPS (443), MQTT (1883), MQTT over TLS (8883) and MQTT over WebSockets (9001)
+ports. Mount `/data` explicitly so settings and the device identity survive
+replacement of the container. Set `VENUS_HTTP_PORT` or `VENUS_HTTPS_PORT` and
+publish the same container port when port 80 or 443 cannot be used.
+
+Hardware access requires the relevant devices to be passed through. A
+privileged container is the broad option and is required for unrestricted
+device access; its sysfs operations affect the host kernel.
+
+#### Step 2 — Publish architecture images
+
+Publish immutable architecture tags and advance the beta tags:
+
+```sh
+./oci_release.sh all beta
+```
+
+The destination repositories are defined in `oci_release.sh`. Publishing
+needs `skopeo`; authenticate with each registry first.
+
+#### Step 3 — Publish the multi-architecture manifest
+
+Pass the version reported by `oci_release.sh`:
+
+```sh
+./oci_manifest.sh v3.90-beta4 beta
+```
+
+This publishes the immutable version manifest before advancing the `beta`
+manifest. The destination repositories are defined in `oci_manifest.sh`.
+
+Published tags have these meanings:
+
+| Tag | Meaning |
+|---|---|
+| `beta` | Most recently published beta |
+| `release` | Most recently published release |
+| `v3.80` | Immutable release |
+| `v3.90-beta1` | Immutable beta |
+
+Architecture suffixes such as `v3.80-arm64` are inputs to the corresponding
+multi-architecture version tag.
 
 ### Various notes
 
