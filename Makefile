@@ -1,4 +1,4 @@
-.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images oci $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES)) $(MACHINES_OCI)
 
 SHELL = bash
 CONFIG ?= scarthgap
@@ -33,6 +33,13 @@ help:
 	@echo "      - Builds swu files for all MACHINES"
 	@echo "    make swus-large"
 	@echo "      - Builds swu files for all MACHINES_LARGE"
+	@echo
+	@echo "  Containers"
+	@echo "    make arm64-oci"
+	@echo "      - Builds an OCI archive for arm64."
+	@echo "        Other MACHINES_OCI: armv7-oci, amd64-oci"
+	@echo "    make oci"
+	@echo "      - Builds all of MACHINES_OCI."
 	@echo
 	@echo "  Building (bootable) images is also supported, but it depends on the machine"
 	@echo "    make beaglebone-venus-image"
@@ -78,16 +85,17 @@ help:
 	@echo "which can run many threads in parallel. For common tasks it is slower since it parses more configs."
 
 build/conf/bblayers.conf: metas.whitelist
-	@echo 'LCONF_VERSION = "6"' > build/conf/bblayers.conf
+	@echo 'LCONF_VERSION = "7"' > build/conf/bblayers.conf
 	@echo 'BBPATH_EXTRA ??= ""' >> build/conf/bblayers.conf
 	@echo 'BBPATH = "$${BBPATH_EXTRA}$${TOPDIR}"' >> build/conf/bblayers.conf
 	@echo 'BBFILES ?= ""' >> build/conf/bblayers.conf
 	@echo >> build/conf/bblayers.conf
 	@echo 'BBLAYERS = " \' >> build/conf/bblayers.conf
-	@find -L sources -wholename "*/conf/layer.conf" | sed -e 's,/conf/layer.conf,,g' -e 's,^./,,g' | sort > metas.found
-	@sort metas.whitelist > metas.whitelist.sorted.tmp
-	@comm -1 -2 metas.found metas.whitelist.sorted.tmp | sed -e 's,$$, \\,g' -e "s,^,$$PWD/,g" >> build/conf/bblayers.conf
-	@rm metas.whitelist.sorted.tmp
+	@while IFS= read -r meta; do \
+		if [ -f "$$meta/conf/layer.conf" ]; then \
+			printf '%s/%s \\\n' "$$PWD" "$$meta"; \
+		fi; \
+	done < metas.whitelist >> build/conf/bblayers.conf
 	@echo '"' >> build/conf/bblayers.conf
 
 %-bb: build/conf/bblayers.conf
@@ -132,7 +140,7 @@ prereq:
 		coreutils unzip texi2html texinfo docbook-utils \
 		gawk diffstat help2man make gcc build-essential g++ \
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
-		python3-dev python3-setuptools
+		python3-dev python3-setuptools skopeo
 
 cortexa7hf-sdk: build/conf/bblayers.conf
 	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
@@ -163,6 +171,13 @@ swu-large: build/conf/bblayers.conf
 swus: $(addsuffix -swu,$(MACHINES))
 
 swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
+
+# builds the OCI image for MACHINE=arm64 etc directly via bitbake
+# (venus-image-oci.bb: IMAGE_FSTYPES = "container oci"), see MACHINES_OCI
+%-oci: build/conf/bblayers.conf
+	export MACHINE=$* && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image-oci
+
+oci: $(MACHINES_OCI)
 
 # complete machine specific build / no sdk
 %-machine: build/conf/bblayers.conf
