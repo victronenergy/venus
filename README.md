@@ -65,6 +65,9 @@ make beaglebone-venus-image
 # build the swu file only
 make ccgx-swu
 
+# build a Container GX image
+make armv7-container-gx
+
 # build from within the bitbake shell.
 # this will have the same end result as make ccgx-swu
 make ccgx-bb
@@ -236,6 +239,55 @@ Changes need to be either really small, well tested or very important
 To build, create a pipeline on the mirrors/venus repo, and run it for the
 maintenance branch. No variables needed.
 
+### Container GX
+
+The Container GX machines are `container-gx-amd64`, `container-gx-arm64`
+and `container-gx-armv7`.
+
+#### Step 1 — Build: `make <arch>-container-gx`
+
+```sh
+make arm64-container-gx
+make amd64-container-gx
+make armv7-container-gx
+```
+
+or `make container-gx` for all three. BitBake creates its standard OCI
+archive in `deploy/venus/images/<machine>/`, and the make target converts it
+into an archive that Docker can load:
+
+- `venus-<version>-oci.tar` is the OCI archive used for publishing.
+- `venus-<machine>-<datetime>-<version>-loadable.tar` can be loaded by
+  Docker or Podman. `venus-<machine>-loadable.tar` points to the latest one.
+
+```sh
+docker load -i deploy/venus/images/container-gx-arm64/venus-container-gx-arm64-loadable.tar
+```
+
+For details on using the container-GX image, see
+[container-GX](https://github.com/victronenergy/container-GX).
+
+#### Step 2 — Publish: `./container_gx_release.sh <beta|release>`
+
+Publish the three built architectures as one multi-architecture image under
+its immutable version tag and advance the channel tag:
+
+```sh
+./container_gx_release.sh beta
+```
+
+The destination repositories are defined in `container_gx_release.sh`.
+Publishing needs `skopeo` and `python3`; authenticate with each registry
+first (`skopeo login`).
+
+Published tags have these meanings:
+
+| Tag | Meaning |
+|---|---|
+| `beta` | Most recently published beta |
+| `latest` | Most recently published release |
+| `v3.80` | Immutable release |
+| `v3.90-beta1` | Immutable beta |
 
 ### Various notes
 
