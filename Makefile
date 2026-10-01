@@ -1,4 +1,4 @@
-.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES))
+.PHONY: bb clean clean-keep-sstate fetch fetch-all fetch-install help update-repos.conf sdk venus-image venus-images oci $(addsuffix bb-,$(MACHINES)) $(addsuffix -venus-image,$(MACHINES)) $(MACHINES_OCI)
 
 SHELL = bash
 CONFIG ?= scarthgap
@@ -33,6 +33,13 @@ help:
 	@echo "      - Builds swu files for all MACHINES"
 	@echo "    make swus-large"
 	@echo "      - Builds swu files for all MACHINES_LARGE"
+	@echo
+	@echo "  Containers"
+	@echo "    make arm64-oci"
+	@echo "      - Builds an OCI archive for arm64."
+	@echo "        Other MACHINES_OCI: armv7-oci, amd64-oci"
+	@echo "    make oci"
+	@echo "      - Builds all of MACHINES_OCI."
 	@echo
 	@echo "  Building (bootable) images is also supported, but it depends on the machine"
 	@echo "    make beaglebone-venus-image"
@@ -163,6 +170,13 @@ swu-large: build/conf/bblayers.conf
 swus: $(addsuffix -swu,$(MACHINES))
 
 swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
+
+# builds the OCI image for MACHINE=arm64 etc directly via bitbake
+# (venus-image-oci.bb: IMAGE_FSTYPES = "container oci"), see MACHINES_OCI
+%-oci: build/conf/bblayers.conf
+	export MACHINE=$* && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image-oci
+
+oci: $(MACHINES_OCI)
 
 # complete machine specific build / no sdk
 %-machine: build/conf/bblayers.conf
