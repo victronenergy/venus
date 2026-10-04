@@ -84,9 +84,9 @@ build/conf/bblayers.conf: metas.whitelist
 	@echo 'BBFILES ?= ""' >> build/conf/bblayers.conf
 	@echo >> build/conf/bblayers.conf
 	@echo 'BBLAYERS = " \' >> build/conf/bblayers.conf
-	@find -L sources -wholename "*/conf/layer.conf" | sed -e 's,/conf/layer.conf,,g' -e 's,^./,,g' | sort > metas.found
-	@sort metas.whitelist > metas.whitelist.sorted.tmp
-	@comm -1 -2 metas.found metas.whitelist.sorted.tmp | sed -e 's,$$, \\,g' -e "s,^,$$PWD/,g" >> build/conf/bblayers.conf
+	@find -L sources -wholename "*/conf/layer.conf" | sed -e 's,/conf/layer.conf,,g' -e 's,^./,,g' | LC_ALL=C sort > metas.found
+	@LC_ALL=C sort metas.whitelist > metas.whitelist.sorted.tmp
+	@LC_ALL=C comm -1 -2 metas.found metas.whitelist.sorted.tmp | sed -e 's,$$, \\,g' -e "s,^,$$PWD/,g" >> build/conf/bblayers.conf
 	@rm metas.whitelist.sorted.tmp
 	@echo '"' >> build/conf/bblayers.conf
 
