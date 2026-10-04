@@ -10,7 +10,6 @@ sources/meta-qt4
 sources/meta-qt6
 sources/meta-swupdate
 sources/meta-victronenergy/meta-alternatives
-sources/meta-victronenergy/meta-backports
 sources/meta-victronenergy/meta-bsp
 sources/meta-victronenergy/meta-third-party
 sources/meta-victronenergy/meta-venus
