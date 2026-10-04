@@ -128,11 +128,13 @@ fetch-install:
 	git clone git@git.victronenergy.com:ccgx/install.git
 
 prereq:
-	@sudo apt-get install sed wget cvs subversion git-core \
+	@sudo apt-get install sed wget cvs subversion git \
 		coreutils unzip texi2html texinfo docbook-utils \
 		gawk diffstat help2man make gcc build-essential g++ \
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
-		python3-dev python3-setuptools
+		python3-dev python3-setuptools \
+		cpio file lz4 zstd xz-utils locales iputils-ping socat \
+		python3-git python3-jinja2 python3-pexpect python3-subunit
 
 cortexa7hf-sdk: build/conf/bblayers.conf
 	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
