@@ -36,7 +36,7 @@ help:
 	@echo
 	@echo "  Containers"
 	@echo "    make arm64-oci"
-	@echo "      - Builds an OCI archive for arm64."
+	@echo "      - Builds an OCI archive and a docker-loadable archive for arm64."
 	@echo "        Other MACHINES_OCI: armv7-oci, amd64-oci"
 	@echo "    make oci"
 	@echo "      - Builds all of MACHINES_OCI."
@@ -139,7 +139,7 @@ prereq:
 		coreutils unzip texi2html texinfo docbook-utils \
 		gawk diffstat help2man make gcc build-essential g++ \
 		desktop-file-utils chrpath u-boot-tools imagemagick zip \
-		python3-dev python3-setuptools
+		python3-dev python3-setuptools skopeo
 
 cortexa7hf-sdk: build/conf/bblayers.conf
 	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
@@ -175,6 +175,7 @@ swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
 # (venus-image-oci.bb: IMAGE_FSTYPES = "container oci"), see MACHINES_OCI
 %-oci: build/conf/bblayers.conf
 	export MACHINE=$* && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image-oci
+	./oci_loadable.sh $@
 
 oci: $(MACHINES_OCI)
 
