@@ -16,12 +16,16 @@
 # login build-feeds
 # password THEPASSWORD
 
+# Get homedir in any poorly loaded environment, where variables don't exist.
+username=$(id -u --name)
+homedir=$(getent passwd "$username" | cut -d : -f 6)
+lock_file="$homedir/.upload-sstate.lock"
 
 # Normally the CI box only runs one of these jobs, but we're making sure no
 # rsyncs work in parallel on the same tree. The upload happens fast, so it
 # shouldn't be an issue.
 if [[ "${FLOCKER}" != "$0" ]]; then
-  exec env FLOCKER="$0" flock --exclusive "$0" "$0" "$@" || :
+  exec env FLOCKER="$0" flock --exclusive "$lock_file" "$0" "$@" || :
 fi
 
 here_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
