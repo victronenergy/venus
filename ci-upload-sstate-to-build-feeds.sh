@@ -7,7 +7,7 @@
 #
 # SSTATE_MIRRORS ?= "\
 # file://.* file:///${VENUS_CI_SSTATE_DIR}/PATH\n\
-# file://.* https://build-feeds.victronenergy.com/venus_ci_shared/sstate-cache-3.8x/PATH;downloadfilename=PATH"
+# file://.* https://build-feeds.victronenergy.com/venus_ci_shared/ubuntu_26.04/sstate-cache-3.8x/PATH;downloadfilename=PATH"
 #
 #
 # Then, make ~/.netrc (mode 0600, otherwise it won't work) with:
@@ -39,6 +39,20 @@ on_exit()
 
 trap on_exit EXIT
 
+distro_version=""
+
+# shellcheck disable=SC1091
+source /etc/os-release 2>/dev/null
+
+if [[ -n "$VERSION_ID" && -n "$ID" ]]; then
+  distro_version="${ID}_${VERSION_ID}"
+fi
+
+if [[ -z "$distro_version" ]]; then
+  1>&2 echo "Error: no distro version detected. We want that because the SSTATE is hard-coupled to that, and we upload to a dir per distro version"
+  exit 9
+fi
+
 error_output=$(mktemp)
 
 if ! rsync \
@@ -46,7 +60,7 @@ if ! rsync \
   --delete-after \
   --delay-updates \
   "$here_dir/venus_ci_shared" \
-  builder@build-feeds.victronenergy.com:/mnt/data/www/html/build-feeds 2> "$error_output"
+  "builder@build-feeds.victronenergy.com:/mnt/data/www/html/build-feeds/$distro_version" 2> "$error_output"
 then
   error_text=$(cat "$error_output")
   msg="$0 errored:\n${error_text}.\n\nWe are not generating an error to avoid CI pipeline errors."
