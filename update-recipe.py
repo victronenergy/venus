@@ -10,6 +10,7 @@ import sys
 import tempfile
 import textwrap
 import urllib
+import urllib.parse
 
 verbose = False
 git = False
