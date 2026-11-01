@@ -7,7 +7,9 @@ type=""
 
 update() {
 	host=$1
-	if [ "$host" = "localhost" ]; then
+	if [ -n "$port" ]; then
+		sshargs="-p$port"
+	elif [ "$host" = "localhost" ]; then
 		sshargs="-p4000 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=quiet"
 	fi
 
@@ -45,8 +47,11 @@ update() {
 	cat $here/deploy/venus/images/$machine/$swu_file | ssh $sshargs root@$host /opt/victronenergy/swupdate-scripts/check-updates.sh -swu file:///dev/stdin
 }
 
-while getopts "t:" o; do
+while getopts "p:t:" o; do
 	case "$o" in
+	p)
+		port="${OPTARG}"
+		;;
 	t)
 		case "${OPTARG}" in
 		"normal")
@@ -65,9 +70,13 @@ done
 shift $(expr $OPTIND - 1 )
 
 if [ "$#" -eq 0 ]; then
-	echo "$0 [-t normal|large] host1 [host2 ...]"
+	echo "$0 [-p port] [-t normal|large] host1 [host2 ...]"
 	echo
 	echo "Upload the latests build swu file to the host(s)."
+	echo
+	echo "-p port"
+	echo "     The ssh port, for example of a reverse ssh tunnel to the GX. Without it,"
+	echo "     localhost means port 4000."
 	echo
 	echo "-t normal| large"
 	echo "     The image type to be installed, by default the same image type will be"
