@@ -11,24 +11,38 @@
 stages:
   - build
 
-build-scarthgap-full:
+variables:
+  CONFIG: scarthgap
+  SHARED_DIR: /mnt/persistent/venus_ci_shared
+
+  # With SSTATE=yes, the old shared state is reused, otherwise a new one will
+  # be populated, but it only replace the current one after building succesfully.
+  CI_SSTATE_DIR: ${SHARED_DIR}/sstate-cache-${CI_COMMIT_BRANCH}
+  CI_SSTATE_TMPDIR: ${CI_SSTATE_DIR}-tmp
+  CI_SSTATE_OLDDIR: ${CI_SSTATE_DIR}-old
+
+  # the two below are passed to bitbake as env variables.
+  DL_DIR: ${SHARED_DIR}/downloads
+  PERSISTENT_DIR: ${CI_SSTATE_DIR}/persistent-${CI_COMMIT_BRANCH}
+
+build-full:
   variables:
     SSTATE: "build from cache"
   script:
-    - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
+    - make CONFIG=${CONFIG} reconf fetch-all build/conf/bblayers.conf
     - if [ "$SSTATE" = "yes" ]; then
-        export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make mc-venus;
+        export SSTATE_DIR=${CI_SSTATE_DIR} && make mc-venus;
       else
-        rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-tmp;
-        export BBPATH_EXTRA="$PWD/sites/ci-master:" && make mc-venus;
+        rm -rf ${CI_SSTATE_TMPDIR};
+        export SSTATE_DIR=${CI_SSTATE_TMPDIR} && make mc-venus;
       fi
     - if [ "$SSTATE" != "yes" ]; then
-        [ -e /mnt/persistent/venus_ci_shared/sstate-cache ] && mv -f /mnt/persistent/venus_ci_shared/sstate-cache /mnt/persistent/venus_ci_shared/sstate-cache-old;
-        mv /mnt/persistent/venus_ci_shared/sstate-cache-tmp /mnt/persistent/venus_ci_shared/sstate-cache;
-        [ -e /mnt/persistent/venus_ci_shared/sstate-cache-old ] && rm -rf /mnt/persistent/venus_ci_shared/sstate-cache-old;
+        [ -e ${CI_SSTATE_DIR} ] && mv -f ${CI_SSTATE_DIR} ${CI_SSTATE_OLDDIR};
+        mv ${CI_SSTATE_TMPDIR} ${CI_SSTATE_DIR};
+        [ -e ${CI_SSTATE_OLDDIR} ] && rm -rf ${CI_SSTATE_OLDDIR};
       fi
     - rm -rf build/tmp*
-    - ./ci-populate-artifacts.sh scarthgap
+    - ./ci-populate-artifacts.sh $CONFIG
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     - ./ci-upload-artifacts-to-www.sh
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch in the BRANCH variable
@@ -40,15 +54,15 @@ build-scarthgap-full:
     - vic-alm-build-p02
     - venus
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE == "web"'
+    - if: ( $CI_COMMIT_BRANCH == "master" || $CI_COMMIT_BRANCH =~ /^b[3-9]\.[0-9]+$/ ) && $CI_PIPELINE_SOURCE == "web"
       when: always
     - when: never
 
-build-scarthgap:
+build-branch:
   script:
     - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
-    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && make machines
-    - ./ci-populate-artifacts.sh scarthgap
+    - export SSTATE_DIR=${CI_SSTATE_DIR} && make machines
+    - ./ci-populate-artifacts.sh $CONFIG
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch
     # in the BRANCH variable
@@ -61,4 +75,5 @@ build-scarthgap:
   except:
     - tags
     - master
+    - /^b[3-9]\.[0-9]+$/
 
