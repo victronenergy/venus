@@ -2,6 +2,7 @@
 
 SHELL = bash
 CONFIG ?= scarthgap
+PASSTHROUGH = DL_DIR PERSISTENT_DIR SSTATE_DIR
 
 -include conf/machines
 
@@ -91,10 +92,12 @@ build/conf/bblayers.conf: metas.whitelist
 	@echo '"' >> build/conf/bblayers.conf
 
 %-bb: build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file venus-init-build-env
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
+	export BITBAKEDIR=sources/bitbake MACHINE=$(subst -bb,,$@) && bash --init-file venus-init-build-env
 
 bb: build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake && bash --init-file venus-init-build-env
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
+	export BITBAKEDIR=sources/bitbake && bash --init-file venus-init-build-env
 
 clean-keep-sstate:
 	@rm -rf build/tmp-eglibc
@@ -137,23 +140,28 @@ prereq:
 		python3-git python3-jinja2 python3-pexpect python3-subunit
 
 cortexa7hf-sdk: build/conf/bblayers.conf
-	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
-	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
+	export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
+	export MACHINE=raspberrypi2 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
+	bitbake venus-sdk && bitbake package-index
 
 cortexa8hf-sdk: build/conf/bblayers.conf
-	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
-	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
+	export MACHINE=dummy-cortexa8hf && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
+	bitbake venus-sdk && bitbake package-index
 
 aarch64-sdk: build/conf/bblayers.conf
-	export MACHINE=sdk-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-sdk
-	export MACHINE=sdk-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake package-index
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
+	export MACHINE=sdk-aarch64 && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
+	bitbake venus-sdk && bitbake package-index
 
 sdks: cortexa7hf-sdk cortexa8hf-sdk aarch64-sdk
 
 %-swu: build/conf/bblayers.conf
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
 	export MACHINE=$(subst -swu,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu
 
 %-swu-large: build/conf/bblayers.conf
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
 	export MACHINE=$(subst -swu-large,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-swu-large
 
 swu: build/conf/bblayers.conf
@@ -168,6 +176,7 @@ swus-large: $(addsuffix -swu-large,$(MACHINES_LARGE))
 
 # complete machine specific build / no sdk
 %-machine: build/conf/bblayers.conf
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
 	export MACHINE=$(subst -machine,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
 	bitbake packagegroup-venus packagegroup-venus-machine packagegroup-venus-optional-packages && \
 	bitbake package-index
@@ -181,9 +190,11 @@ update-repos.conf:
 venus: machines sdks
 
 %-venus-image: build/conf/bblayers.conf
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
 	export MACHINE=$(subst -venus-image,,$@) && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
 
 venus-image: build/conf/bblayers.conf
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake venus-image
 
 venus-images: $(addsuffix -venus-image,$(MACHINES))
@@ -203,32 +214,33 @@ MC_A8_SDK = mc:ccgx:venus-sdk
 MC_SDKS = $(MC_A8_SDK) mc:sdk-aarch64:venus-sdk
 
 %-mc-swu: build/conf/bblayers.conf
-	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG ${PASSTHROUGH}" BBMULTICONFIG="$(subst -mc-swu,,$@)" && \
 	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-swus: build/conf/bblayers.conf
-	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS)" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG ${PASSTHROUGH}" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS)" && \
 	export MACHINES_LARGE="$(MACHINES_LARGE)" MACHINES_LARGE_CMD="venus-swu-large" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-swu
 
 mc-sdks: build/conf/bblayers.conf
-	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="ccgx sdk-aarch64" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG ${PASSTHROUGH}" BBMULTICONFIG="ccgx sdk-aarch64" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && ./bitbake-mc.sh venus-sdk
 
 mc-venus: build/conf/bblayers.conf
 	# For some reason the mc:k3r5:u-boot-k3r5 doesn't seem to work, just build it first.
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="${PASSTHROUGH}" && \
 	export MACHINE=am62xx && . ./sources/openembedded-core/oe-init-build-env build sources/bitbake && \
-	 bitbake mc:k3r5:u-boot-k3r5
+	bitbake mc:k3r5:u-boot-k3r5
 
-	export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS) sdk-aarch64" && \
+	@export BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG ${PASSTHROUGH}" BBMULTICONFIG="$(MACHINES) $(MC_MACHINE_DEPS) sdk-aarch64" && \
 	. ./sources/openembedded-core/oe-init-build-env build sources/bitbake && bitbake $(MC_SDKS) $(MC_VENUS) $(MC_MACHINE) $(MC_OPTIONAL) && \
 	./bitbake-mc.sh package-index
 
 %-mc-bb: build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -mc-bb,,$@) BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(subst -mc-bb,,$@)" && \
+	@export BITBAKEDIR=sources/bitbake MACHINE=$(subst -mc-bb,,$@) BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG ${PASSTHROUGH}" BBMULTICONFIG="$(subst -mc-bb,,$@)" && \
 	bash --init-file venus-init-build-env
 
 mc-bb:  build/conf/bblayers.conf
-	@export BITBAKEDIR=sources/bitbake BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG" BBMULTICONFIG="$(MACHINES)" && \
+	@export BITBAKEDIR=sources/bitbake BB_ENV_PASSTHROUGH_ADDITIONS="BBMULTICONFIG ${PASSTHROUGH}" BBMULTICONFIG="$(MACHINES)" && \
 	bash --init-file venus-init-build-env
