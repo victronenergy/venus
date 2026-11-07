@@ -61,7 +61,7 @@ build-full:
 build-branch:
   script:
     - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
-    - export SSTATE_DIR=${CI_SSTATE_DIR} && make machines
+    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && export VENUS_CI_SSTATE_DIR=${CI_SSTATE_DIR} && make machines
     - ./ci-populate-artifacts.sh $CONFIG
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch
