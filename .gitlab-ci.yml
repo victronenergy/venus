@@ -49,7 +49,7 @@ build-full:
     - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master -F variables[BRANCH]=$CI_COMMIT_REF_NAME \
       -F variables[PUSH_TO_TESTING]=yes https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
     - make clean
-    - /ci-upload-sstate-to-build-feeds.sh ${CI_SSTATE_DIR};
+    - ./ci-upload-sstate-to-build-feeds.sh ${CI_SSTATE_DIR};
   stage: build
   tags:
     - vic-alm-build-p02
