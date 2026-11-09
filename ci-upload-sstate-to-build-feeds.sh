@@ -4,11 +4,8 @@
 #
 # SSTATE_MIRRORS += "file://.* https://build-feeds.victronenergy.com/venus_ci_shared/sstate-cache-master/PATH;downloadfilename=PATH"
 #
-# Then, make ~/.netrc (mode 0600, otherwise it won't work) with:
-#
-# machine build-feeds.victronenergy.com
-# login build-feeds
-# password THEPASSWORD
+# Note that build-feeds is not publicly accessible. Its accessible internally in the Victron networks. For devboxes and toolboxes,
+# the access is arranged with ~/.netrc and /etc/hosts files.
 
 if [ $# -ne 1 ]; then
   echo "Need the directory where the shared state is"
