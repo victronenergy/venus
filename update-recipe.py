@@ -49,10 +49,14 @@ def find_repo(bbfile):
 # returns the srcrev for a given git tag
 def get_src_rev(url, tag):
 	info("get_src_rev trying %s with %s" % (url, tag))
-	rsp = subprocess.check_output(["git", "ls-remote", url, tag], text=True)
-	if not rsp:
-		return None
-	return rsp.split()[0]
+	tag_ref = tag if tag.startswith("refs/tags/") else "refs/tags/" + tag
+	peeled_ref = tag_ref + "^{}"
+	rsp = subprocess.check_output(["git", "ls-remote", url, tag_ref, peeled_ref], text=True)
+	refs = {}
+	for line in rsp.splitlines():
+		revision, ref = line.split()
+		refs[ref] = revision
+	return refs.get(peeled_ref, refs.get(tag_ref))
 
 def git_rm(file):
 	info = find_repo(file)
