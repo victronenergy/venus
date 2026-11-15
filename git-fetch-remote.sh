@@ -11,7 +11,7 @@ prop=build/prop.`basename $1`
 
 # fetch url / push url might differ, commonly fetch by https, push by ssh
 echo "export fetch_url=$2" > $prop
-echo "export git_repo=${2##*/}" > $prop
+echo "export git_repo=${2##*/}" >> $prop
 echo "export push_url=$3" >> $prop
 
 if [ "$4" != "-" ]; then
