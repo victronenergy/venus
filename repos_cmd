@@ -22,12 +22,14 @@ if [ -d "install" ]; then
 	repos="${repos} install"
 fi
 
+result=0
 for repo in $repos; do
 	. $root/build/prop.`basename $repo`
 	do_echo
 	do_echo $repo:
-	cd "$root/$repo" && eval "$@";
+	cd "$root/$repo" && eval "$@" || result=1
 done
 cd $root
 
 do_echo
+exit "$result"
