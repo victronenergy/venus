@@ -97,9 +97,7 @@ bb: build/conf/bblayers.conf
 	@export BITBAKEDIR=sources/bitbake && bash --init-file venus-init-build-env
 
 clean-keep-sstate:
-	@rm -rf build/tmp-eglibc
-	@rm -rf build/tmp-glibc
-	@rm -rf build/tmp
+	@rm -rf build/tmp*
 	@rm -rf deploy
 	@rm -f build/conf/bblayers.conf
 
