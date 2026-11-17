@@ -100,14 +100,19 @@ bb: build/conf/bblayers.conf
 	export BITBAKEDIR=sources/bitbake && bash --init-file venus-init-build-env
 
 clean-keep-sstate:
-	@rm -rf build/tmp-eglibc
-	@rm -rf build/tmp-glibc
-	@rm -rf build/tmp
+	@rm -rf build/tmp*
 	@rm -rf deploy
 	@rm -f build/conf/bblayers.conf
 
-clean: clean-keep-sstate
-	@rm -rf build/sstate-cache
+# SSTATE_DIR can be set elsewhere, such as in ~/.config/venus/local.conf, and
+# be shared with other checkouts: keep it, but say so. Ask bitbake before
+# clean-keep-sstate removes bblayers.conf.
+clean:
+	@sstate=$$(. ./sources/openembedded-core/oe-init-build-env build sources/bitbake >/dev/null && \
+		bitbake-getvar -q --value SSTATE_DIR 2>/dev/null) || sstate=; \
+	$(MAKE) --no-print-directory clean-keep-sstate && \
+	rm -rf build/sstate-cache && \
+	if [ -d "$$sstate" ]; then echo "Kept SSTATE_DIR $$sstate, outside this checkout"; fi
 
 conf:
 	ln -s configs/$(CONFIG) conf
