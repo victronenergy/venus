@@ -21,6 +21,10 @@ variables:
   CI_SSTATE_TMPDIR: ${CI_SSTATE_DIR}-tmp
   CI_SSTATE_OLDDIR: ${CI_SSTATE_DIR}-old
 
+  # CI builds (build-branch) use the sstate of the full build of the branch
+  # they are based on, so they only build what they change.
+  CI_SSTATE_BASE_DIR: ${SHARED_DIR}/sstate-cache-master
+
   # the two below are passed to bitbake as env variables.
   DL_DIR: ${SHARED_DIR}/downloads
   PERSISTENT_DIR: ${CI_SSTATE_DIR}/persistent-${CI_COMMIT_BRANCH}
@@ -62,7 +66,7 @@ build-full:
 build-branch:
   script:
     - make CONFIG=scarthgap reconf fetch-all build/conf/bblayers.conf
-    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && export VENUS_CI_SSTATE_DIR=${CI_SSTATE_DIR} && make machines
+    - export BBPATH_EXTRA="$PWD/sites/ci-mirror:" && export VENUS_CI_SSTATE_DIR=${CI_SSTATE_BASE_DIR} && make machines
     - ./ci-populate-artifacts.sh $CONFIG
     - ./ci-upload-artifacts-to-build-feeds.sh $CI_COMMIT_REF_NAME
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch
