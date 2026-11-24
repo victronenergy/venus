@@ -12,11 +12,29 @@ stages:
   - build
 
 variables:
-  CONFIG: scarthgap
-  SHARED_DIR: /mnt/persistent/venus_ci_shared
+  # These two are shown as dropdowns when starting a pipeline in GitLab.
+  # SSTATE is used by build-full only.
+  SSTATE:
+    description: |
+      How to handle the sstate cache of this branch:
+      - **rebuild** (default): build everything again, and replace the
+        cache when that succeeds.
+      - **reuse**: build with the cache.
+    value: rebuild
+    options:
+      - rebuild
+      - reuse
+  CONFIG:
+    description: |
+      The folder in configs/ to build:
+      - **scarthgap** (default)
+      - **master**: build against OpenEmbedded master.
+    value: scarthgap
+    options:
+      - scarthgap
+      - master
 
-  # With SSTATE=yes, the old shared state is reused, otherwise a new one will
-  # be populated, but it only replace the current one after building succesfully.
+  SHARED_DIR: /mnt/persistent/venus_ci_shared
   CI_SSTATE_DIR: ${SHARED_DIR}/sstate-cache-${CI_COMMIT_BRANCH}
   CI_SSTATE_TMPDIR: ${CI_SSTATE_DIR}-tmp
   CI_SSTATE_OLDDIR: ${CI_SSTATE_DIR}-old
@@ -26,17 +44,15 @@ variables:
   PERSISTENT_DIR: ${CI_SSTATE_DIR}/persistent-${CI_COMMIT_BRANCH}
 
 build-full:
-  variables:
-    SSTATE: "build from cache"
   script:
     - make CONFIG=${CONFIG} reconf fetch-all build/conf/bblayers.conf
-    - if [ "$SSTATE" = "yes" ]; then
+    - if [ "$SSTATE" = "reuse" ]; then
         export SSTATE_DIR=${CI_SSTATE_DIR} && make mc-venus;
       else
         rm -rf ${CI_SSTATE_TMPDIR};
         export SSTATE_DIR=${CI_SSTATE_TMPDIR} && make mc-venus;
       fi
-    - if [ "$SSTATE" != "yes" ]; then
+    - if [ "$SSTATE" != "reuse" ]; then
         [ -e ${CI_SSTATE_DIR} ] && mv -f ${CI_SSTATE_DIR} ${CI_SSTATE_OLDDIR};
         mv ${CI_SSTATE_TMPDIR} ${CI_SSTATE_DIR};
         [ -e ${CI_SSTATE_OLDDIR} ] && rm -rf ${CI_SSTATE_OLDDIR};
