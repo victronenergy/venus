@@ -12,8 +12,8 @@ stages:
   - build
 
 variables:
-  # These two are shown as dropdowns when starting a pipeline in GitLab.
-  # SSTATE is used by build-full only.
+  # These three are shown as dropdowns when starting a pipeline in GitLab.
+  # SSTATE and PUSH_TO_TESTING are used by build-full only.
   SSTATE:
     description: |
       How to handle the sstate cache of this branch:
@@ -33,6 +33,18 @@ variables:
     options:
       - scarthgap
       - master
+  PUSH_TO_TESTING:
+    description: |
+      After the build, a pipeline in
+      [venus-tests](https://git.victronenergy.com/venus-ci/venus-tests/-/pipelines)
+      tests it. Select what you want to happen when the tests pass:
+      - **yes** (default): it is pushed to the testing feed.
+      - **no**: nothing; push it later with the manual job
+        push-develop-to-testing-manual in that pipeline.
+    value: "yes"
+    options:
+      - "yes"
+      - "no"
 
   SHARED_DIR: /mnt/persistent/venus_ci_shared
   CI_SSTATE_DIR: ${SHARED_DIR}/sstate-cache-${CI_COMMIT_BRANCH}
@@ -63,7 +75,7 @@ build-full:
     - ./ci-upload-artifacts-to-www.sh
     # trigger a pipeline on venus-tests repo; master branch; and pass our branch in the BRANCH variable
     - "curl -X POST -F token=56bd8d45f917e9ff0ff396005a8c98 -F ref=master -F variables[BRANCH]=$CI_COMMIT_REF_NAME \
-      -F variables[PUSH_TO_TESTING]=yes https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
+      -F variables[PUSH_TO_TESTING]=$PUSH_TO_TESTING https://git.victronenergy.com/api/v4/projects/221/trigger/pipeline"
     - make clean
     - ./ci-upload-sstate-to-build-feeds.sh ${CI_SSTATE_DIR};
   stage: build
