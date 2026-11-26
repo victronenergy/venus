@@ -296,17 +296,17 @@ class Recipe(object):
 		url = url.replace('${PV}', pv)
 		url = url.replace('${BPN}', self._known_pn)
 
-		fd, tmp = tempfile.mkstemp()
-		result = subprocess.run(["wget", "-O", tmp, url])
-		if result.returncode != 0:
-			warn("Failed to fetch " + url + " " + str(result.returncode))
-			return False
+		with tempfile.TemporaryDirectory() as tmp_dir:
+			tmp = os.path.join(tmp_dir, "source")
+			result = subprocess.run(["wget", "-O", tmp, url])
+			if result.returncode != 0:
+				warn("Failed to fetch " + url + " " + str(result.returncode))
+				return False
 
-		result = subprocess.run(["sha256sum", tmp], capture_output=True, encoding='utf8')
-		os.remove(tmp)
-		if result.returncode != 0:
-			warn("Failed to determined sha256sum for " + tmp)
-			return False
+			result = subprocess.run(["sha256sum", tmp], capture_output=True, encoding='utf8')
+			if result.returncode != 0:
+				warn("Failed to determined sha256sum for " + tmp)
+				return False
 
 		sha256 = result.stdout.split()[0]
 		self._sha256sum.set(sha256)
