@@ -165,7 +165,7 @@ class BitbakeVarDef(object):
 	def var_def(name, value):
 		if '"' in value:
 			warn("doubles quotes in values isn't supported %s %s" % (name, value))
-			value.replace('"', "'")
+			value = value.replace('"', "'")
 		return name + ' = "' + value + '"'
 
 	def set(self, value):
