@@ -86,10 +86,18 @@ if [ "$#" -eq 0 ]; then
 	exit
 fi
 
+pids=()
 while (( "$#" ));
 do
-	update $1 &
+	update "$1" &
+	pids+=("$!")
 	shift
 done
 
-wait
+status=0
+for pid in "${pids[@]}"; do
+	if ! wait "$pid"; then
+		status=1
+	fi
+done
+exit "$status"
