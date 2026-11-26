@@ -87,7 +87,7 @@ def git_last_log(bbdir, git: str=".", branch: str="HEAD"):
 # Import bbdir from src_git into tg_dir.
 def import_bb_dir(src_git: str, tg_dir: str, hash: str, bbdir: str):
 	print(f"importing {src_git}/{bbdir} hash {hash} into {tg_dir}")
-	subprocess.run(["git", "-C", src_git, "--work-tree=" + tg_dir, "checkout", hash, "--", bbdir], capture_output=True, text=True)
+	subprocess.run(["git", "-C", src_git, "--work-tree=" + tg_dir, "checkout", hash, "--", bbdir], capture_output=True, text=True, check=True)
 
 def add_commits(refs: dict, git: str):
 	for hash, ref in refs.items():
@@ -107,8 +107,8 @@ def print_patches(refs: dict):
 		print(hash[:8] + " " + ref["title"])
 
 def git_commit_dir(git: str, path: str, msg: str):
-	subprocess.run(["git", "-C", git, "add", path])
-	subprocess.run(["git", "-C", git, "commit", "-e", "-m", msg])
+	subprocess.run(["git", "-C", git, "add", path], check=True)
+	subprocess.run(["git", "-C", git, "commit", "-e", "-m", msg], check=True)
 
 def apply_patches(patches: dict, src_git :str, tg_git: str, bbdir: str):
 	repo = os.path.basename(src_git)
