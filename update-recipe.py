@@ -99,7 +99,7 @@ class BitbakeVarDef(object):
 	def __init__(self, name, recipe):
 		self._name = name
 		self._recipe = recipe
-		self._re = re.compile(re.escape(self._name) + r'\s*=\s*"([^"]*)"')
+		self._re = re.compile(r'^[ \t]*' + re.escape(self._name) + r'\s*=\s*"([^"]*)"', re.MULTILINE)
 		self.search()
 
 	def search(self):
@@ -147,7 +147,7 @@ class BitbakeVarDef(object):
 	# replaces whole words
 	def replace(self, what, new):
 		new = new.replace('"', "'")
-		regex = re.compile(r'(' + re.escape(self._name) + r'\s*=\s*)"([^"]*)"')
+		regex = re.compile(r'([ \t]*' + re.escape(self._name) + r'\s*=\s*)"([^"]*)"')
 		m = re.match(regex, self._definition)
 		if m:
 			words = re.split(r'(\s+)', m[2])
@@ -183,7 +183,7 @@ class BitbakeVarDef(object):
 		self.search()
 
 	def update(self):
-		self._recipe._content = self._recipe._content.replace(self._orig, self._definition)
+		self._recipe._content = self._re.sub(lambda match: self._definition, self._recipe._content, count=1)
 		self._orig = self._definition
 
 	def __str__(self):
