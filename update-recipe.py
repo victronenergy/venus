@@ -429,7 +429,7 @@ class Recipe(object):
 				warn("trouble: " + str(pv) + " != " + self._known_pv)
 
 			# with all set and done, lets update the recipe
-			self.update_by_pv(pv)
+			return self.update_by_pv(pv)
 
 		elif not self._known_pv:
 			# if no version is known, just give up
