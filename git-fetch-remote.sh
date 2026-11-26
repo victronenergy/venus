@@ -28,7 +28,7 @@ fi
 
 if [ "$6" != "-" ]; then
 	echo "export upstream_full_branch=$6" >> $prop
-	echo "export upstream_branch=${6##*/}" >> $prop
+	echo "export upstream_branch=${6#*/}" >> $prop
 else
 	echo "export upstream_full_branch=" >> $prop
 	echo "export upstream_branch=" >> $prop
