@@ -34,7 +34,7 @@ else
 	echo "export upstream_branch=" >> $prop
 fi
 
-git clone --no-checkout $2 $1
+git clone --no-checkout $2 $1 || exit $?
 
 # set the upstream to push changes back
 git --git-dir=$1/.git remote set-url --push origin $3
